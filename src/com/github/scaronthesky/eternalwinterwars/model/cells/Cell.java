@@ -10,7 +10,7 @@ import com.github.scaronthesky.eternalwinterwars.model.cells.movementbehaviours.
 import com.github.scaronthesky.eternalwinterwars.model.cells.sightbehaviours.CellSightBehaviour;
 import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
 
-public class Cell {
+public abstract class Cell {
 
 	private UUID uuid;
 	private Sprite sprite;

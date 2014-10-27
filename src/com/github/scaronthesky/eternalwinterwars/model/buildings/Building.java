@@ -8,7 +8,7 @@ import com.github.scaronthesky.eternalwinterwars.model.buildings.producebehaviou
 import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 
-public class Building extends FightingEntity {
+public abstract class Building extends FightingEntity {
 
 	private ProduceBehaviour produceBehavior;
 	

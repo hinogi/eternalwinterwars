@@ -21,8 +21,15 @@ public class PlayerImpl implements Player {
 		return this.budget;
 	}
 
-	public void setBudget(int budget) {
-		this.budget = budget;
+	@Override
+	public void earnBudget(int budget) {
+		this.budget += budget;
+
+	}
+
+	@Override
+	public void looseBudget(int budget) {
+		this.budget -= budget;
 	}
 
 }

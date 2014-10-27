@@ -18,8 +18,6 @@ public class Cavalry extends Unit {
 
 	public Cavalry(UUID uuid, Sprite sprite, Player owner) {
 		super(uuid, sprite, owner);
-		setUuid(uuid);
-		setOwner(owner);
 		setHealthBehaviour(new PowerfulHealth());
 		setMovementBehaviour(new UnitVeryFastSpeed());
 		setPiercingWeaponBehaviour(new NoPiercingWeapon());

@@ -18,8 +18,6 @@ public class Catapult extends Unit {
 
 	public Catapult(UUID uuid, Sprite sprite, Player owner) {
 		super(uuid, sprite, owner);
-		setUuid(uuid);
-		setOwner(owner);
 		setHealthBehaviour(new NormalHealth());
 		setMovementBehaviour(new UnitSlowSpeed());
 		setPiercingWeaponBehaviour(new NoPiercingWeapon());

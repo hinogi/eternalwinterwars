@@ -19,8 +19,6 @@ public class Archer extends Unit {
 
 	public Archer(UUID uuid, Sprite sprite, Player owner) {
 		super(uuid, sprite, owner);
-		setUuid(uuid);
-		setOwner(owner);
 		setHealthBehaviour(new WeakHealth());
 		setMovementBehaviour(new UnitFastSpeed());
 		setPiercingWeaponBehaviour(new Bow());

@@ -18,8 +18,6 @@ public class Knight extends Unit {
 
 	public Knight(UUID uuid, Sprite sprite, Player owner) {
 		super(uuid, sprite, owner);
-		setUuid(uuid);
-		setOwner(owner);
 		setHealthBehaviour(new NormalHealth());
 		setMovementBehaviour(new UnitNormalSpeed());
 		setPiercingWeaponBehaviour(new Sword());

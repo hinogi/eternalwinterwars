@@ -9,7 +9,7 @@ import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 import com.github.scaronthesky.eternalwinterwars.model.units.costbehaviours.CostBehaviour;
 import com.github.scaronthesky.eternalwinterwars.model.units.movementbehaviours.UnitMovementBehaviour;
 
-public class Unit extends FightingEntity {
+public abstract class Unit extends FightingEntity {
 
 	private UnitMovementBehaviour movementBehaviour;
 	private CostBehaviour costBehaviour;
