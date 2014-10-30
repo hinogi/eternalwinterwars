@@ -1,0 +1,3 @@
+Knight: Laufen, Angreifen, Sterben, (Verteidigen) nach oben unten und rechte Seite (links kann gespiegelt werden)
+Jede Animation besteht aus zwei bis fünf Bildern
+Jedes Einzelbild muss 64x64 sein

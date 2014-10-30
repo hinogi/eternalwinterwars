@@ -1,0 +1,4 @@
+Linien:schwarz RGB:0,0,0
+Füllfarbe: Grau RGB:64,64,64
+
+Rauschen: 19/27/52,63

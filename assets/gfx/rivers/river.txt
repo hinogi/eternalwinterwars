@@ -1,0 +1,8 @@
+Rauschen: 16/16/100
+12 Pixel Abstand von den Rändern zum Strand und 21 Pixel Abstand zum Wasser. An den Übergängen ist der Strand also 9 Pixel breit.
+Die Buchstaben in der Benahmung zeigen die Aschlussmöglichkeiten:
+n = Nord
+o = Ost
+s = Süd
+w = West
+
