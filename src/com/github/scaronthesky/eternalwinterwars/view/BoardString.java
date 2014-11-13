@@ -46,9 +46,11 @@ public class BoardString implements Comparable<BoardString> {
 		for (int lRow = 0; lRow < gRows; lRow++) {
 			ArrayList<Cell> internalCellArray = new ArrayList<Cell>();
 			for (int lColumn = 0; lColumn < gColumns; lColumn++) {
-				internalCellArray.add(convertCharToCellType(lColumn, lRow,
-						gBoardString.charAt(lRow * gColumns + lColumn)));
+				Cell cel = convertCharToCellType(lColumn, lRow,
+						gBoardString.charAt(lRow * gColumns + lColumn));
+				internalCellArray.add(cel);
 			}
+			cells.add(internalCellArray);
 		}
 		return cells;
 	}
@@ -63,37 +65,53 @@ public class BoardString implements Comparable<BoardString> {
 	 * @return {@link CellType}
 	 */
 	private Cell convertCharToCellType(int pColumn, int pRow, char pCharacter) {
-		switch (pCharacter) {
+		char cellChar = getCharFromImageKey(pCharacter);
+		String imageKey = String.valueOf(pCharacter);
+		switch (cellChar) {
 		case 'P':
-			return new Plain(UUID.randomUUID(), null, null, new Sprite(pColumn
-					* gController.getView().getCellSideLength(), pRow
-					* gController.getView().getCellSideLength(), null,
-					gController.getMainActivity()
-							.getVertexBufferObjectManager()));
+		case 'B':
+			return new Plain(UUID.randomUUID(), null, null, null);
 		case 'F':
 			return new Forest(UUID.randomUUID(), null, null, new Sprite(pColumn
 					* gController.getView().getCellSideLength(), pRow
 					* gController.getView().getCellSideLength(), gController
 					.getView().getResourceManager().getTextureRegions()
-					.get(pCharacter), gController.getMainActivity()
+					.get(imageKey), gController.getMainActivity()
 					.getVertexBufferObjectManager()));
 		case 'M':
 			return new Mountain(UUID.randomUUID(), null, null, new Sprite(
 					pColumn * gController.getView().getCellSideLength(), pRow
 							* gController.getView().getCellSideLength(),
 					gController.getView().getResourceManager()
-							.getTextureRegions().get(pCharacter), gController
+							.getTextureRegions().get(imageKey), gController
 							.getMainActivity().getVertexBufferObjectManager()));
 		case 'R':
 			return new River(UUID.randomUUID(), null, null, new Sprite(pColumn
 					* gController.getView().getCellSideLength(), pRow
 					* gController.getView().getCellSideLength(), gController
 					.getView().getResourceManager().getTextureRegions()
-					.get(pCharacter), gController.getMainActivity()
+					.get(imageKey), gController.getMainActivity()
 					.getVertexBufferObjectManager()));
 		default:
 			return null;
 		}
+	}
+
+	public char getCharFromImageKey(char pChar) {
+		String key = String.valueOf(pChar);
+		String imageName = gController.getView().getResourceManager()
+				.getKeyMap().get(key);
+		if (imageName != null) {
+			if (imageName.startsWith("mountain")) {
+				return 'M';
+			} else if (imageName.startsWith("tree")) {
+				return 'T';
+			} else if (imageName.startsWith("river")) {
+				return 'R';
+			}
+		}
+		return 'B';
+
 	}
 
 	public String getBackgroundTypeString() {

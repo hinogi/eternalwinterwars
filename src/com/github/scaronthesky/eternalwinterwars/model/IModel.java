@@ -12,4 +12,6 @@ public interface IModel {
 	public void finishEditing();
 
 	public CellControl getCellControl();
+
+	public void displayBoard();
 }

@@ -29,12 +29,7 @@ public class GameControl {
 				.getSceneManager()
 				.getGameScene()
 				.setBoard(
-						new Board(pController,
-								pController.getModel().getCellControl()
-										.getCells().size(),
-								pController.getModel().getCellControl()
-										.getCells().get(0).size(),
-								cellSideLength, cellSideLength));
+						new Board(pController, cellSideLength, cellSideLength));
 	}
 
 	public int getPlayerCount() {

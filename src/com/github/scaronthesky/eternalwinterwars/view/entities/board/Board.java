@@ -37,8 +37,7 @@ public class Board extends Entity {
 	 * @param cellControl
 	 *            .getCells() {@link Cell} - array
 	 */
-	public Board(IController pController, int pColumns, int pRows,
-			float pCellWidth, float pCellHeight) {
+	public Board(IController pController, float pCellWidth, float pCellHeight) {
 		this.gController = pController;
 		this.gCellWidth = pCellWidth;
 		this.gCellHeight = pCellHeight;
@@ -72,7 +71,7 @@ public class Board extends Entity {
 	 */
 	private void initializeBackgroundSprite() {
 		Sprite lBackgroundSprite = new Sprite(0, 0, this.gController.getView()
-				.getResourceManager().getTextureRegions().get(2),
+				.getResourceManager().getTextureRegions().get("2"),
 				this.gController.getMainActivity()
 						.getVertexBufferObjectManager());
 		lBackgroundSprite.setWidth(this.gController.getModel().getCellControl()
@@ -91,12 +90,15 @@ public class Board extends Entity {
 	 *            {@link Cell} - array
 	 */
 	private void initializeCellSprites(ArrayList<ArrayList<Cell>> pCells) {
-		for (int lColumn = 0; lColumn < pCells.size(); lColumn++) {
-			for (int lRow = 0; lRow < pCells.get(0).size(); lRow++) {
-				Sprite lCellSprite = pCells.get(lColumn).get(lRow).getSprite();
-				lCellSprite.setWidth(this.gCellWidth);
-				lCellSprite.setHeight(this.gCellHeight);
-				this.attachChild(lCellSprite);
+		for (int lRow = 0; lRow < pCells.size(); lRow++) {
+			for (int lColumn = 0; lColumn < pCells.get(0).size(); lColumn++) {
+				Cell cell = pCells.get(lRow).get(lColumn);
+				Sprite lCellSprite = cell.getSprite();
+				if (lCellSprite != null) {
+					lCellSprite.setWidth(this.gCellWidth);
+					lCellSprite.setHeight(this.gCellHeight);
+					this.attachChild(lCellSprite);
+				}
 			}
 		}
 	}

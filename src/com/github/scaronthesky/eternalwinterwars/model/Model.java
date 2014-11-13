@@ -30,15 +30,13 @@ public class Model implements IModel {
 	 */
 	public Model(IController controller) {
 		this.setController(controller);
-		// Displays the GameScene - GUI 'setVisible(true)'. Has to be done after
-		// creating the SharedPreferencesManager(!)
-		this.displayBoard(getRandomMap());
 	}
 
-	public void displayBoard(BoardString boardMap) {
+	@Override
+	public void displayBoard() {
 		// Creates a CellControl, needs at least one stored BoardMap to work.
 		// Has to be done after creating the SharedPreferencesManager(!)
-		this.setCellControl(new CellControl(boardMap.getCells()));
+		this.setCellControl(getCellControl());
 	}
 
 	/**
@@ -66,8 +64,9 @@ public class Model implements IModel {
 	@Override
 	public CellControl getCellControl() {
 		if (cellControl == null) {
-			cellControl = new CellControl(getController().getIOService()
-					.getMapStorage().get("Map#1").getCells());
+			BoardString bs = getController().getIOService().getMapStorage()
+					.get("Map#1");
+			cellControl = new CellControl(bs.getCells());
 		}
 		return cellControl;
 	}

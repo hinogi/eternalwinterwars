@@ -11,6 +11,7 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
+import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
 
 import android.graphics.Typeface;
@@ -81,7 +82,7 @@ public class ResourceManager extends AManager {
 				"menu.png");
 		this.gTextureRegionCoinEntity = this.loadImageResource(80, 80,
 				"settings.png");
-		this.gTextureRegionButtonSlideBar = this.loadImageResource(80,80,
+		this.gTextureRegionButtonSlideBar = this.loadImageResource(80, 80,
 				"settings.png");
 		this.gTextureRegionParticleSnow = this.loadImageResource(80, 80,
 				"settings.png");
@@ -125,6 +126,10 @@ public class ResourceManager extends AManager {
 			lIOException.printStackTrace();
 		}
 		return this.gKeyMap;
+	}
+
+	public Map<String, String> getKeyMap() {
+		return gKeyMap;
 	}
 
 	/**

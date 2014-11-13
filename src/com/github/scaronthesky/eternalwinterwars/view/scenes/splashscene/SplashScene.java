@@ -47,6 +47,7 @@ public class SplashScene extends AControllerScene {
 					@Override
 					public void onModifierFinished(
 							IModifier<IEntity> pModifier, IEntity pItem) {
+						getController().getModel().displayBoard();
 						SplashScene.this.getController().getView()
 								.getSceneManager()
 								.setActualSceneType(pNewScene);

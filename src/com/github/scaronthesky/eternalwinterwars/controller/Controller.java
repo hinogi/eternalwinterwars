@@ -194,4 +194,9 @@ public class Controller implements IController {
 		return new int[] { (int) (pX / lCellSideLength),
 				(int) (pY / lCellSideLength) };
 	}
+
+	@Override
+	public String toString() {
+		return "Model=" + model + "/View=" + view;
+	}
 }
