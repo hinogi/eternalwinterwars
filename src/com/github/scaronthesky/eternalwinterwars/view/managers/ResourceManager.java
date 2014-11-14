@@ -11,7 +11,6 @@ import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.util.color.Color;
 
 import android.graphics.Typeface;
@@ -38,6 +37,8 @@ public class ResourceManager extends AManager {
 	private ITextureRegion gTextureRegionCoinEntity;
 	private ITextureRegion gTextureRegionButtonSlideBar;
 	private ITextureRegion gTextureRegionParticleSnow;
+	private ITextureRegion gTextureRegionControlBase;
+	private ITextureRegion gTextureRegionControlKnob;
 	private ITiledTextureRegion gTiledTextureRegionButton;
 	private ITiledTextureRegion gTiledTextureRegionTestUnitMove;
 	private ITiledTextureRegion gTiledTextureRegionBlood;
@@ -80,12 +81,16 @@ public class ResourceManager extends AManager {
 				"settings.png");
 		this.gTextureRegionButtonMenu = this.loadImageResource(120, 80,
 				"menu.png");
-		this.gTextureRegionCoinEntity = this.loadImageResource(80, 80,
-				"settings.png");
-		this.gTextureRegionButtonSlideBar = this.loadImageResource(80, 80,
-				"settings.png");
-		this.gTextureRegionParticleSnow = this.loadImageResource(80, 80,
-				"settings.png");
+		this.gTextureRegionCoinEntity = this.loadImageResource(100, 100,
+				"coin.png");
+		this.gTextureRegionButtonSlideBar = this.loadImageResource(64, 64,
+				"slidebar_icon.png");
+		this.gTextureRegionControlBase = this.loadImageResource(128, 128,
+				"onscreen_control_base.png");
+		this.gTextureRegionControlKnob = this.loadImageResource(64, 64,
+				"onscreen_control_knob.png");
+		this.gTextureRegionParticleSnow = this.loadImageResource(32, 32,
+				"snowflake.png");
 		this.gTiledTextureRegionButton = this.loadTiledImageResource(371, 600,
 				"button.png", 1, 3);
 		this.gTiledTextureRegionTestUnitMove = this.loadTiledImageResource(256,
@@ -129,7 +134,7 @@ public class ResourceManager extends AManager {
 	}
 
 	public Map<String, String> getKeyMap() {
-		return gKeyMap;
+		return this.gKeyMap;
 	}
 
 	/**
@@ -341,6 +346,14 @@ public class ResourceManager extends AManager {
 
 	public ITextureRegion getTextureRegionParticleSnow() {
 		return this.gTextureRegionParticleSnow;
+	}
+
+	public ITextureRegion getTextureRegionControlBase() {
+		return this.gTextureRegionControlBase;
+	}
+
+	public ITextureRegion getTextureRegionControlKnob() {
+		return this.gTextureRegionControlKnob;
 	}
 
 	public ITiledTextureRegion getTiledTextureRegionBlood() {

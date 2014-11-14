@@ -1,6 +1,8 @@
 package com.github.scaronthesky.eternalwinterwars.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.andengine.input.touch.TouchEvent;
@@ -80,23 +82,23 @@ public class Controller implements IController {
 		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_UP,
 				new AnimationProperties(this.view.getResourceManager()
 						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 0, 2, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_LEFT,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 3, 5, true, true, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_RIGHT,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 3, 5, true, false, false));
+						150, 150, 150 }, 0, 3, true, false, false));
 		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_DOWN,
 				new AnimationProperties(this.view.getResourceManager()
 						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 6, 8, true, false, false));
+						150, 150, 150 }, 4, 7, true, false, false));
+		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_RIGHT,
+				new AnimationProperties(this.view.getResourceManager()
+						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
+						150, 150, 150 }, 8, 11, true, false, false));
+		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_LEFT,
+				new AnimationProperties(this.view.getResourceManager()
+						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
+						150, 150, 150 }, 8, 11, true, true, false));
 		lAnimationProperties.put(Constants.ANIMATION_KEY_IDLE,
 				new AnimationProperties(this.view.getResourceManager()
 						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 6, 8, true, false, false));
+						150, 150, 150 }, 4, 7, true, false, false));
 		UnitEntity lUnitEntity = new UnitEntity(this, this.view
 				.getSceneManager().getGameScene(), this.getView()
 				.getCellSideLength(),
@@ -123,8 +125,15 @@ public class Controller implements IController {
 		if (pTouchEvent.isActionDown()) {
 			this.view.getSoundManager().getSounds().get(SoundType.ATTACK)
 					.play();
-			this.mainActivity.getSmoothCamera().setCenter(pTouchEvent.getX(),
-					pTouchEvent.getY());
+			List<float[]> lAppearCoordinatesOnGameScene = new ArrayList<float[]>();
+			lAppearCoordinatesOnGameScene.add(this.getAbsoluteCoordinates(this
+					.getLogicalCoordinates(pTouchEvent.getX(),
+							pTouchEvent.getY())));
+			this.view
+					.getSceneManager()
+					.getGameScene()
+					.addIncome(lAppearCoordinatesOnGameScene,
+							(int) (Math.random() * 100));
 			return true;
 		}
 		return false;
@@ -197,6 +206,6 @@ public class Controller implements IController {
 
 	@Override
 	public String toString() {
-		return "Model=" + model + "/View=" + view;
+		return "Model=" + this.model + "/View=" + this.view;
 	}
 }

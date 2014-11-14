@@ -95,17 +95,18 @@ public class GameScene extends AControllerScene implements
 	@Override
 	public void addIncome(List<float[]> pAppearCoordinatesOnGameScene,
 			int pNewCoinCount) {
-		GameHUD lGameHUD = getController().getView().getHUDManager()
+		GameHUD lGameHUD = this.getController().getView().getHUDManager()
 				.getGameHUD();
-		List<float[]> lAppearCoordinatesOnGameHUD = convertSceneToHUDCoordinates(pAppearCoordinatesOnGameScene);
-		lGameHUD.registerEntityModifier(new IncomeAddEffect(getController(),
-				lGameHUD.getCoinEntity().getX()
-						+ lGameHUD.getCoinEntity().getSpriteCoin().getX(),
-				lGameHUD.getCoinEntity().getY()
-						+ lGameHUD.getCoinEntity().getSpriteCoin().getY(),
-				this, Constants.INCOME_MOVE_TO_DEST_DURATION, getController()
+		List<float[]> lAppearCoordinatesOnGameHUD = this
+				.convertSceneToHUDCoordinates(pAppearCoordinatesOnGameScene);
+		lGameHUD.registerEntityModifier(new IncomeAddEffect(this
+				.getController(), lGameHUD.getCoinEntity().getX()
+				+ lGameHUD.getCoinEntity().getSpriteCoin().getX(), lGameHUD
+				.getCoinEntity().getY()
+				+ lGameHUD.getCoinEntity().getSpriteCoin().getY(), lGameHUD,
+				Constants.INCOME_MOVE_TO_DEST_DURATION, this.getController()
 						.getView().getResourceManager()
-						.getTextureRegionCoinEntity(), getController()
+						.getTextureRegionCoinEntity(), this.getController()
 						.getMainActivity().getVertexBufferObjectManager(),
 				lAppearCoordinatesOnGameHUD, lGameHUD.getCoinEntity()
 						.getSpriteCoin().getWidth(), lGameHUD.getCoinEntity()
@@ -116,7 +117,8 @@ public class GameScene extends AControllerScene implements
 			List<float[]> pCoordinatesScene) {
 		List<float[]> lCoordinatesHUD = new ArrayList<float[]>();
 		for (float[] lCoordinateSetScene : pCoordinatesScene) {
-			lCoordinatesHUD.add(getController()
+			lCoordinatesHUD.add(this
+					.getController()
 					.getMainActivity()
 					.getSmoothCamera()
 					.getCameraSceneCoordinatesFromSceneCoordinates(
@@ -206,25 +208,26 @@ public class GameScene extends AControllerScene implements
 					@Override
 					public void onModifierStarted(IModifier<IEntity> pModifier,
 							IEntity pItem) {
-						iText = new Text(pSourceX, pSourceY,
-								getController().getView().getResourceManager()
-										.getFontDamage(), String
-										.valueOf(pDamageDone), getController()
-										.getMainActivity()
+						this.iText = new Text(pSourceX, pSourceY,
+								GameScene.this.getController().getView()
+										.getResourceManager().getFontDamage(),
+								String.valueOf(pDamageDone), GameScene.this
+										.getController().getMainActivity()
 										.getVertexBufferObjectManager());
-						attachChild(iText);
-						iText.registerEntityModifier(new MoveModifier(
-								Constants.DAMAGE_MOVE_TO_DEST_DURATION, iText
-										.getX(), pDestX, iText.getY(), pDestY));
-						iText.registerEntityModifier(new AlphaModifier(
-								Constants.DAMAGE_MOVE_TO_DEST_DURATION, iText
-										.getAlpha(), 0));
+						GameScene.this.attachChild(this.iText);
+						this.iText.registerEntityModifier(new MoveModifier(
+								Constants.DAMAGE_MOVE_TO_DEST_DURATION,
+								this.iText.getX(), pDestX, this.iText.getY(),
+								pDestY));
+						this.iText.registerEntityModifier(new AlphaModifier(
+								Constants.DAMAGE_MOVE_TO_DEST_DURATION,
+								this.iText.getAlpha(), 0));
 					}
 
 					@Override
 					public void onModifierFinished(
 							IModifier<IEntity> pModifier, IEntity pItem) {
-						detachChild(iText);
+						GameScene.this.detachChild(this.iText);
 					}
 				});
 		this.registerEntityModifier(lDelayModifier);
@@ -234,7 +237,7 @@ public class GameScene extends AControllerScene implements
 			final AGameBaseEntity pGameBaseEntity, final int pDamageDone,
 			final boolean pAttackedUnitOrBuildingKilled) {
 		if (pUnitEntity.hasRangeSprite()) {
-			detachChild(pUnitEntity.getRangeSprite());
+			this.detachChild(pUnitEntity.getRangeSprite());
 		}
 		DelayModifier lDelayModifier = new DelayModifier(
 				AGameBaseEntity.SUFFER_DURATION, new IEntityModifierListener() {
@@ -243,7 +246,7 @@ public class GameScene extends AControllerScene implements
 					public void onModifierStarted(IModifier<IEntity> pModifier,
 							IEntity pItem) {
 						pGameBaseEntity.sufferFromAttack();
-						showDamageText(
+						GameScene.this.showDamageText(
 								pGameBaseEntity.getX(),
 								pGameBaseEntity.getY(),
 								pGameBaseEntity.getX(),
@@ -337,15 +340,15 @@ public class GameScene extends AControllerScene implements
 
 	@Override
 	public void attachChild(IEntity pEntity) throws IllegalStateException {
-		attachChildOnLayer(pEntity, 1);
+		this.attachChildOnLayer(pEntity, 1);
 	}
 
 	public void attachChildOnMidLayer(IEntity pEntity) {
-		attachChildOnLayer(pEntity, 2);
+		this.attachChildOnLayer(pEntity, 2);
 	}
 
 	public void attachChildOnTop(IEntity pEntity) {
-		attachChildOnLayer(pEntity, 3);
+		this.attachChildOnLayer(pEntity, 3);
 	}
 
 	private void attachChildOnLayer(IEntity pEntity, int pZIndex) {

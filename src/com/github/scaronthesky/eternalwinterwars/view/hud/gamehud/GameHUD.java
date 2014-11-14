@@ -1,11 +1,17 @@
 package com.github.scaronthesky.eternalwinterwars.view.hud.gamehud;
 
+import javax.microedition.khronos.opengles.GL10;
+
+import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl;
+import org.andengine.engine.camera.hud.controls.AnalogOnScreenControl.IAnalogOnScreenControlListener;
+import org.andengine.engine.camera.hud.controls.BaseOnScreenControl;
 import org.andengine.entity.Entity;
 import org.andengine.entity.modifier.MoveYModifier;
 import org.andengine.input.touch.TouchEvent;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.model.Model;
+import com.github.scaronthesky.eternalwinterwars.view.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.hud.ControllerHUD;
 
 /**
@@ -21,6 +27,7 @@ public class GameHUD extends ControllerHUD {
 	private Entity gSlideInBar;
 	private CoinEntity gCoinEntity;
 	private MoveYModifier gMoveYModifier;
+	private AnalogOnScreenControl gCameraControlEntity;
 
 	/**
 	 * Creates an instance of {@link GameHUD}
@@ -36,6 +43,68 @@ public class GameHUD extends ControllerHUD {
 	public void initialize() {
 		this.attachChild(this.getSlideInBar());
 		this.attachChild(this.getCoinEntity());
+		this.attachChild(this.getCameraControlEntity());
+	}
+
+	private AnalogOnScreenControl getCameraControlEntity() {
+		if (this.gCameraControlEntity == null) {
+			float lSideLength = this.gButtonSettings.getWidth();
+			this.gCameraControlEntity = new AnalogOnScreenControl(0, this
+					.getController().getMainActivity().getSmoothCamera()
+					.getHeight(), this.getController().getMainActivity()
+					.getSmoothCamera(), this.getController().getView()
+					.getResourceManager().getTextureRegionControlBase(), this
+					.getController().getView().getResourceManager()
+					.getTextureRegionControlKnob(), 0.1f, this.getController()
+					.getMainActivity().getVertexBufferObjectManager(),
+					new IAnalogOnScreenControlListener() {
+
+						@Override
+						public void onControlChange(
+								BaseOnScreenControl pBaseOnScreenControl,
+								float pValueX, float pValueY) {
+							GameHUD.this
+									.getController()
+									.getMainActivity()
+									.getSmoothCamera()
+									.setCenter(
+											GameHUD.this.getController()
+													.getMainActivity()
+													.getSmoothCamera()
+													.getCenterX()
+													+ pValueX
+													* Constants.CAMERA_CONTROL_MOVE_MULTIPLICATOR,
+											GameHUD.this.getController()
+													.getMainActivity()
+													.getSmoothCamera()
+													.getCenterY()
+													+ pValueY
+													* Constants.CAMERA_CONTROL_MOVE_MULTIPLICATOR);
+						}
+
+						@Override
+						public void onControlClick(
+								AnalogOnScreenControl pAnalogOnScreenControl) {
+
+						}
+					});
+			this.gCameraControlEntity.getControlBase().setBlendFunction(
+					GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			this.gCameraControlEntity.getControlBase().setAlpha(0.3f);
+			this.gCameraControlEntity.getControlKnob().setAlpha(0.5f);
+			this.gCameraControlEntity.getControlBase().setScaleCenter(0, 128);
+			this.gCameraControlEntity.getControlBase().setWidth(
+					this.gButtonSettings.getWidth());
+			this.gCameraControlEntity.getControlBase().setHeight(lSideLength);
+			this.gCameraControlEntity.getControlKnob()
+					.setWidth(lSideLength / 2);
+			this.gCameraControlEntity.getControlKnob().setHeight(
+					lSideLength / 2);
+			this.gCameraControlEntity.refreshControlKnobPosition();
+			this.attachChild(this.gCameraControlEntity);
+			this.setChildScene(this.gCameraControlEntity);
+		}
+		return this.gCameraControlEntity;
 	}
 
 	public Entity getSlideInBar() {
@@ -80,12 +149,36 @@ public class GameHUD extends ControllerHUD {
 
 	public void slideBar(float pDuration) {
 		if (this.gMoveYModifier == null || this.gMoveYModifier.isFinished()) {
+			boolean lSlideOut = this.gSlideInBar.getY() == 0;
 			this.gMoveYModifier = new MoveYModifier(pDuration,
-					this.gSlideInBar.getY(),
-					this.gSlideInBar.getY() == 0 ? -(this.getButtonSettings()
-							.getHeight() + this.getButtonMenu().getHeight())
-							: 0);
+					this.gSlideInBar.getY(), lSlideOut ? -(this
+							.getButtonSettings().getHeight() + this
+							.getButtonMenu().getHeight()) : 0);
 			this.gSlideInBar.registerEntityModifier(this.gMoveYModifier);
+			this.gCameraControlEntity.getControlBase().registerEntityModifier(
+					new MoveYModifier(pDuration, this.gCameraControlEntity
+							.getControlBase().getY(),
+							lSlideOut ? this.gCameraControlEntity
+									.getControlBase().getY()
+									+ this.gCameraControlEntity
+											.getControlBase().getHeight()
+									: this.gCameraControlEntity
+											.getControlBase().getY()
+											- this.gCameraControlEntity
+													.getControlBase()
+													.getHeight()));
+			this.gCameraControlEntity.getControlKnob().registerEntityModifier(
+					new MoveYModifier(pDuration, this.gCameraControlEntity
+							.getControlKnob().getY(),
+							lSlideOut ? this.gCameraControlEntity
+									.getControlKnob().getY()
+									+ this.gCameraControlEntity
+											.getControlBase().getHeight()
+									: this.gCameraControlEntity
+											.getControlKnob().getY()
+											- this.gCameraControlEntity
+													.getControlBase()
+													.getHeight()));
 		}
 	}
 
@@ -128,6 +221,7 @@ public class GameHUD extends ControllerHUD {
 			this.gCoinEntity.setX(this.getController().getMainActivity()
 					.getSmoothCamera().getWidth()
 					- this.gCoinEntity.getWidth());
+			this.gCoinEntity.setText("0");
 		}
 		return this.gCoinEntity;
 	}

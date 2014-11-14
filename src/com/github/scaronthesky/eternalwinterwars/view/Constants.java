@@ -24,4 +24,7 @@ public abstract class Constants {
 
 	public static final float INCOME_MOVE_TO_DEST_DURATION = 2f;
 	public static final float DAMAGE_MOVE_TO_DEST_DURATION = 1.5f;
+
+	public static final float CAMERA_CONTROL_MOVE_MULTIPLICATOR = 50f;
+	public static final float CAMERA_CONTROL_BASE_APPEAR_DURATION = 0.5f;
 }

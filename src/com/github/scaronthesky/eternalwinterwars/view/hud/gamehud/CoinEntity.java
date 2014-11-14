@@ -3,15 +3,17 @@ package com.github.scaronthesky.eternalwinterwars.view.hud.gamehud;
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.util.HorizontalAlign;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
+
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
  * 
  */
 public class CoinEntity extends Entity {
-	private IController gController;
+	private final IController gController;
 	private Text gTextScore;
 	private Sprite gSpriteCoin;
 
@@ -24,11 +26,17 @@ public class CoinEntity extends Entity {
 	public Text getTextScore() {
 		if (this.gTextScore == null) {
 			this.gTextScore = new Text(0, 0, this.gController.getView()
-					.getResourceManager().getFontCoinEntity(), "00000",
+					.getResourceManager().getFontCoinEntity(), "000",
 					this.gController.getMainActivity()
 							.getVertexBufferObjectManager());
 		}
 		return this.gTextScore;
+	}
+
+	public void setText(String pText) {
+		this.gTextScore.setText(pText);
+		this.gTextScore.getTextOptions().setHorizontalAlign(
+				HorizontalAlign.RIGHT);
 	}
 
 	public Sprite getSpriteCoin() {
