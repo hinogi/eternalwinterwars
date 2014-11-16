@@ -8,7 +8,6 @@ import com.github.scaronthesky.eternalwinterwars.view.entities.game.BuildingEnti
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.hud.gamehud.CoinEntity;
 
-
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
@@ -95,4 +94,13 @@ public interface IGameScene {
 	 * f.e. shows a finishing animation
 	 */
 	public void finish();
+
+	/**
+	 * Shows a dialogue, which allows the selection of attack or cancel after
+	 * unit-movement
+	 * 
+	 * @param pSourceUnitEntity
+	 *            {@link UnitEntity} - Source
+	 */
+	public void showAttackOrCancelDialogue(UnitEntity pSourceUnitEntity);
 }

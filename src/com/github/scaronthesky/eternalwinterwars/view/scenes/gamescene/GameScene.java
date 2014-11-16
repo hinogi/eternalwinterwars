@@ -20,6 +20,7 @@ import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Board;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Mark;
+import com.github.scaronthesky.eternalwinterwars.view.entities.dialogues.AttackOrCancelDialogue;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.hud.gamehud.GameHUD;
@@ -35,6 +36,7 @@ public class GameScene extends AControllerScene implements
 		IOnSceneTouchListener, IGameScene {
 	private Board gBoard;
 	private Mark gMark;
+	private AttackOrCancelDialogue gAttackOrCancelDialogue;
 
 	/**
 	 * Creates an instance of {@link GameScene}
@@ -53,6 +55,7 @@ public class GameScene extends AControllerScene implements
 	 */
 	@Override
 	public void initialize() {
+		this.setTouchAreaBindingOnActionDownEnabled(true);
 		this.setOnSceneTouchListener(this);
 	}
 
@@ -360,5 +363,31 @@ public class GameScene extends AControllerScene implements
 	@Override
 	public void changePlayer(int pPlayerIndex) {
 
+	}
+
+	@Override
+	public void showAttackOrCancelDialogue(UnitEntity pSourceUnitEntity) {
+		if (this.gAttackOrCancelDialogue != null) {
+			this.detachChild(this.gAttackOrCancelDialogue);
+		}
+		float lButtonSideLength = pSourceUnitEntity
+				.getMultiTextureAnimatedSprite().getWidth();
+		this.gAttackOrCancelDialogue = new AttackOrCancelDialogue(
+				this.getController(), this, pSourceUnitEntity,
+				lButtonSideLength, lButtonSideLength);
+		float lStartX = pSourceUnitEntity.getX();
+		float lLeftStartX = lStartX - lButtonSideLength;
+		float lRightStartX = lStartX + lButtonSideLength;
+		float lCameraCenterX = this.getController().getMainActivity()
+				.getSmoothCamera().getCenterX();
+		if (Math.abs(lCameraCenterX - lLeftStartX) < Math.abs(lCameraCenterX
+				- lRightStartX)) {
+			this.gAttackOrCancelDialogue.setX(lLeftStartX);
+		} else {
+			this.gAttackOrCancelDialogue.setX(lRightStartX);
+		}
+		this.gAttackOrCancelDialogue.setY(pSourceUnitEntity.getY()
+				- lButtonSideLength / 2);
+		this.attachChild(this.gAttackOrCancelDialogue);
 	}
 }

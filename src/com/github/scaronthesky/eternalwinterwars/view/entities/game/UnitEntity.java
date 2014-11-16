@@ -45,6 +45,9 @@ public class UnitEntity extends AGameBaseEntity {
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				// XXX TEST!!!
 				if (pSceneTouchEvent.isActionDown()) {
+					UnitEntity.this.getController().getView().getSceneManager()
+							.getGameScene()
+							.showAttackOrCancelDialogue(UnitEntity.this);
 					if (UnitEntity.this.gMarked) {
 						UnitEntity.this.getController().getView()
 								.getSceneManager().getGameScene().removeMark();
@@ -82,6 +85,10 @@ public class UnitEntity extends AGameBaseEntity {
 		this.attachChild(this.gMultiTextureAnimatedSprite);
 		AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
 				pAnimationProperties.get(pStartTileId));
+	}
+
+	public MultiTextureAnimatedSprite getMultiTextureAnimatedSprite() {
+		return this.gMultiTextureAnimatedSprite;
 	}
 
 	public AnimationProperties getAnimationProperties(String pAnimationKey) {

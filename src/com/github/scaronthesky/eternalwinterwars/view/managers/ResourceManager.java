@@ -39,6 +39,8 @@ public class ResourceManager extends AManager {
 	private ITextureRegion gTextureRegionParticleSnow;
 	private ITextureRegion gTextureRegionControlBase;
 	private ITextureRegion gTextureRegionControlKnob;
+	private ITextureRegion gTextureRegionAttack;
+	private ITextureRegion gTextureRegionCancel;
 	private ITiledTextureRegion gTiledTextureRegionButton;
 	private ITiledTextureRegion gTiledTextureRegionTestUnitMove;
 	private ITiledTextureRegion gTiledTextureRegionBlood;
@@ -91,6 +93,10 @@ public class ResourceManager extends AManager {
 				"onscreen_control_knob.png");
 		this.gTextureRegionParticleSnow = this.loadImageResource(32, 32,
 				"snowflake.png");
+		this.gTextureRegionAttack = this
+				.loadImageResource(64, 64, "attack.png");
+		this.gTextureRegionCancel = this
+				.loadImageResource(64, 64, "cancel.png");
 		this.gTiledTextureRegionButton = this.loadTiledImageResource(371, 600,
 				"button.png", 1, 3);
 		this.gTiledTextureRegionTestUnitMove = this.loadTiledImageResource(256,
@@ -342,6 +348,14 @@ public class ResourceManager extends AManager {
 
 	public ITextureRegion getTextureRegionButtonSlideBar() {
 		return this.gTextureRegionButtonSlideBar;
+	}
+
+	public ITextureRegion getTextureRegionAttack() {
+		return this.gTextureRegionAttack;
+	}
+
+	public ITextureRegion getTextureRegionCancel() {
+		return this.gTextureRegionCancel;
 	}
 
 	public ITextureRegion getTextureRegionParticleSnow() {

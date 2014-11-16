@@ -208,4 +208,16 @@ public class Controller implements IController {
 	public String toString() {
 		return "Model=" + this.model + "/View=" + this.view;
 	}
+
+	@Override
+	public void handleAttackButtonClicked(UnitEntity pUnitEntity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleCancelButtonClicked(UnitEntity pUnitEntity) {
+		// TODO Auto-generated method stub
+
+	}
 }
