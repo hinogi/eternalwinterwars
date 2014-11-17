@@ -27,4 +27,14 @@ public abstract class Constants {
 
 	public static final float CAMERA_CONTROL_MOVE_MULTIPLICATOR = 50f;
 	public static final float CAMERA_CONTROL_BASE_APPEAR_DURATION = 0.5f;
+	public static final float RANGED_ATTACK_FLY_DURATION_PER_PIXEL = 0.003f;
+
+	public static final int GAME_BASE_ENTITY_UNIT_KNIGHT_HEALTH = 100;
+	public static final int GAME_BASE_ENTITY_UNIT_MARKSMAN_HEALTH = 70;
+	public static final int GAME_BASE_ENTITY_UNIT_ARTILLERY_HEALTH = 150;
+	public static final int GAME_BASE_ENTITY_UNIT_CAVALLERY_HEALTH = 120;
+	public static final int GAME_BASE_ENTITY_BUILDING_CASTLE_HEALTH = 600;
+
+	public static final float GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC = 0.1f;
+
 }

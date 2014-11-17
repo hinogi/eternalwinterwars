@@ -10,10 +10,13 @@ import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.andengine.entity.modifier.MoveModifier;
 import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 import org.andengine.util.modifier.IModifier;
+
+import android.graphics.Point;
 
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
@@ -36,6 +39,7 @@ public class GameScene extends AControllerScene implements
 		IOnSceneTouchListener, IGameScene {
 	private Board gBoard;
 	private Mark gMark;
+	private boolean gLocked;
 	private AttackOrCancelDialogue gAttackOrCancelDialogue;
 
 	/**
@@ -146,49 +150,73 @@ public class GameScene extends AControllerScene implements
 	public void attack(final UnitEntity pUnitEntity,
 			final AGameBaseEntity pGameBaseEntity, final int pDamageDone,
 			final boolean pAttackedUnitOrBuildingKilled) {
-		final String lAttackKey = this.getAttackKey(pUnitEntity.getX(),
-				pGameBaseEntity.getX(), pUnitEntity.getY(),
-				pGameBaseEntity.getY());
-		final float lAttackDuration = pUnitEntity.getAnimationProperties(
-				lAttackKey).getAccumulatedDuration();
-		DelayModifier lDelayModifier = new DelayModifier(lAttackDuration,
-				new IEntityModifierListener() {
+		if (!this.gLocked) {
+			final String lAttackKey = this.getAttackKey(pUnitEntity.getX(),
+					pGameBaseEntity.getX(), pUnitEntity.getY(),
+					pGameBaseEntity.getY());
+			final float lAttackDuration = pUnitEntity.getAnimationProperties(
+					lAttackKey).getAccumulatedDuration() / 1000;
+			DelayModifier lDelayModifier = new DelayModifier(lAttackDuration,
+					new IEntityModifierListener() {
+
+						@Override
+						public void onModifierStarted(
+								IModifier<IEntity> pModifier, IEntity pItem) {
+							GameScene.this.gLocked = true;
+							pUnitEntity.animate(lAttackKey);
+						}
+
+						@Override
+						public void onModifierFinished(
+								IModifier<IEntity> pModifier, IEntity pItem) {
+							if (pUnitEntity.hasRangeSprite()) {
+								GameScene.this.finishRangedAttack(pUnitEntity,
+										pGameBaseEntity, pDamageDone,
+										pAttackedUnitOrBuildingKilled);
+							} else {
+								GameScene.this.finishAttack(pUnitEntity,
+										pGameBaseEntity, pDamageDone,
+										pAttackedUnitOrBuildingKilled);
+							}
+						}
+					});
+			this.registerEntityModifier(lDelayModifier);
+		}
+	}
+
+	private void finishRangedAttack(final UnitEntity pUnitEntity,
+			final AGameBaseEntity pGameBaseEntity, final int pDamageDone,
+			final boolean pAttackedUnitOrBuildingKilled) {
+		final float lRangedSpriteFlyDuration = (Math.abs(pUnitEntity.getX()
+				- pGameBaseEntity.getX()) + Math.abs(pUnitEntity.getY()
+				- pGameBaseEntity.getY()))
+				* Constants.RANGED_ATTACK_FLY_DURATION_PER_PIXEL;
+		DelayModifier lDelayModifier = new DelayModifier(
+				lRangedSpriteFlyDuration, new IEntityModifierListener() {
 
 					@Override
 					public void onModifierStarted(IModifier<IEntity> pModifier,
 							IEntity pItem) {
-						pUnitEntity.animate(lAttackKey);
-						if (pUnitEntity.hasRangeSprite()) {
-							GameScene.this.attachChild(pUnitEntity
-									.getRangeSprite());
-							pUnitEntity
-									.getRangeSprite()
-									.registerEntityModifier(
-											new MoveModifier(
-													lAttackDuration,
-													pUnitEntity
-															.getRangeSprite()
-															.getX(),
-													pGameBaseEntity.getX()
-															+ pGameBaseEntity
-																	.getWidth()
-															/ 2
-															- pUnitEntity
-																	.getRangeSprite()
-																	.getWidth()
-															/ 2,
-													pUnitEntity
-															.getRangeSprite()
-															.getY(),
-													pGameBaseEntity.getY()
-															+ pGameBaseEntity
-																	.getHeight()
-															/ 2
-															- pUnitEntity
-																	.getRangeSprite()
-																	.getHeight()
-															/ 2));
-						}
+						Sprite lRangeSprite = pUnitEntity.getRangeSprite();
+						lRangeSprite.setX(pUnitEntity.getX());
+						lRangeSprite.setY(pUnitEntity.getY());
+						lRangeSprite.setRotation(GameScene.this.getRangedSpriteAngle(
+								new Point(
+										(int) (pGameBaseEntity.getX() + pGameBaseEntity
+												.getWidth() / 2),
+										(int) (pGameBaseEntity.getY() + pGameBaseEntity
+												.getHeight() / 2)),
+								new Point(
+										(int) (lRangeSprite.getX() + lRangeSprite
+												.getWidth() / 2),
+										(int) (lRangeSprite.getY() + lRangeSprite
+												.getHeight() / 2))));
+						MoveModifier lMoveModifier = new MoveModifier(
+								lRangedSpriteFlyDuration, lRangeSprite.getX(),
+								pGameBaseEntity.getX(), lRangeSprite.getY(),
+								pGameBaseEntity.getY());
+						GameScene.this.attachChildOnMidLayer(lRangeSprite);
+						lRangeSprite.registerEntityModifier(lMoveModifier);
 					}
 
 					@Override
@@ -200,6 +228,16 @@ public class GameScene extends AControllerScene implements
 					}
 				});
 		this.registerEntityModifier(lDelayModifier);
+	}
+
+	public float getRangedSpriteAngle(Point target, Point source) {
+		float angle = (float) Math.toDegrees(Math.atan2(target.y - source.y,
+				target.x - source.x));
+		if (angle < 0) {
+			angle += 360;
+		}
+
+		return angle;
 	}
 
 	private void showDamageText(final float pSourceX, final float pSourceY,
@@ -264,6 +302,7 @@ public class GameScene extends AControllerScene implements
 						if (pAttackedUnitOrBuildingKilled) {
 							GameScene.this.detachChild(pGameBaseEntity);
 						}
+						GameScene.this.gLocked = false;
 					}
 				});
 		this.registerEntityModifier(lDelayModifier);
@@ -388,6 +427,10 @@ public class GameScene extends AControllerScene implements
 		}
 		this.gAttackOrCancelDialogue.setY(pSourceUnitEntity.getY()
 				- lButtonSideLength / 2);
-		this.attachChild(this.gAttackOrCancelDialogue);
+		this.attachChildOnTop(this.gAttackOrCancelDialogue);
+	}
+
+	public boolean isLocked() {
+		return this.gLocked;
 	}
 }

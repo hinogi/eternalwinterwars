@@ -1,17 +1,16 @@
 package com.github.scaronthesky.eternalwinterwars.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.andengine.input.touch.TouchEvent;
 import org.andengine.util.color.Color;
 
+import com.github.scaronthesky.eternalwinterwars.model.IModel;
 import com.github.scaronthesky.eternalwinterwars.model.Model;
 import com.github.scaronthesky.eternalwinterwars.model.editorcontrol.EditorControl;
-import com.github.scaronthesky.eternalwinterwars.view.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.GameControl;
+import com.github.scaronthesky.eternalwinterwars.view.IView;
 import com.github.scaronthesky.eternalwinterwars.view.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.view.View;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.BuildingEntity;
@@ -19,15 +18,14 @@ import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager.SceneType;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager.MusicType;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager.SoundType;
-import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
 import com.github.scaronthesky.eternalwinterwars.view.particles.ParticleSystemBuilder;
 import com.github.scaronthesky.eternalwinterwars.view.scenes.editorscene.EditorScene;
 
 public class Controller implements IController {
 	private MainActivity mainActivity;
 	private IOService ioService;
-	private Model model;
-	private View view;
+	private IModel model;
+	private IView view;
 
 	public Controller(MainActivity mainActivity) {
 		this.mainActivity = mainActivity;
@@ -47,14 +45,18 @@ public class Controller implements IController {
 	}
 
 	@Override
-	public Model getModel() {
+	public IModel getModel() {
 		return this.model;
 	}
 
 	@Override
-	public View getView() {
+	public IView getView() {
 		return this.view;
 	}
+
+	// XXX TEST
+	public static BuildingEntity testBuilding;
+	public static UnitEntity testMarksman;
 
 	@Override
 	public void startTest() {
@@ -64,51 +66,54 @@ public class Controller implements IController {
 		// ---------------------------------------------------------------
 		// XXX BuildingEntity - Test
 		// ---------------------------------------------------------------
-		BuildingEntity lBuildingEntity = new BuildingEntity(this, this
-				.getView().getSceneManager().getGameScene(), this.getView()
-				.getCellSideLength(),
-				this.getView().getCellSideLength() * 0.2f, 100, 100, Color.RED,
-				Color.WHITE, true, this.getView().getResourceManager()
-						.getTextureRegions().get("4"), this.getView()
-						.getCellSideLength());
-		lBuildingEntity.setX(this.view.getCellSideLength() * 10);
-		lBuildingEntity.setY(this.view.getCellSideLength() * 5);
+		testBuilding = this.view.getGameBaseEntityManager().createCastleEntity(
+				this.view.getCellSideLength(),
+				Color.RED,
+				Color.WHITE,
+				this.getView().getResourceManager().getTextureRegions()
+						.get("3"));
+		testBuilding.setX(this.view.getCellSideLength() * 10);
+		testBuilding.setY(this.view.getCellSideLength() * 5);
 		this.getView().getSceneManager().getGameScene()
-				.attachChild(lBuildingEntity);
+				.attachChild(testBuilding);
 		// ---------------------------------------------------------------
 		// XXX UnitEntity - Test
 		// ---------------------------------------------------------------
-		Map<String, AnimationProperties> lAnimationProperties = new HashMap<String, AnimationProperties>();
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_UP,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150, 150 }, 0, 3, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_DOWN,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150, 150 }, 4, 7, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_RIGHT,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150, 150 }, 8, 11, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_LEFT,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150, 150 }, 8, 11, true, true, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_IDLE,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150, 150 }, 4, 7, true, false, false));
-		UnitEntity lUnitEntity = new UnitEntity(this, this.view
-				.getSceneManager().getGameScene(), this.getView()
-				.getCellSideLength(),
-				this.getView().getCellSideLength() * 0.2f, 100, 90,
-				Color.GREEN, Color.WHITE, true, lAnimationProperties,
-				"move_left", this.view.getCellSideLength());
-		lUnitEntity.setX(this.view.getCellSideLength() * 12);
-		lUnitEntity.setY(this.view.getCellSideLength() * 7);
+		UnitEntity lKnight = this
+				.getView()
+				.getGameBaseEntityManager()
+				.createKnight(this.view.getCellSideLength(), Color.BLUE,
+						Color.WHITE);
+		lKnight.setX(this.view.getCellSideLength() * 12);
+		lKnight.setY(this.view.getCellSideLength() * 7);
+		this.getView().getSceneManager().getGameScene().attachChild(lKnight);
+		testMarksman = this
+				.getView()
+				.getGameBaseEntityManager()
+				.createMarksman(this.view.getCellSideLength(), Color.RED,
+						Color.WHITE);
+		testMarksman.setX(this.view.getCellSideLength() * 9);
+		testMarksman.setY(this.view.getCellSideLength() * 6);
 		this.getView().getSceneManager().getGameScene()
-				.attachChild(lUnitEntity);
+				.attachChild(testMarksman);
+		//
+		UnitEntity lArtillery = this
+				.getView()
+				.getGameBaseEntityManager()
+				.createArtillery(this.view.getCellSideLength(), Color.BLUE,
+						Color.WHITE);
+		lArtillery.setX(this.view.getCellSideLength() * 4);
+		lArtillery.setY(this.view.getCellSideLength() * 7);
+		this.getView().getSceneManager().getGameScene().attachChild(lArtillery);
+		//
+		UnitEntity lCavallery = this
+				.getView()
+				.getGameBaseEntityManager()
+				.createCavallery(this.view.getCellSideLength(), Color.BLUE,
+						Color.WHITE);
+		lCavallery.setX(this.view.getCellSideLength() * 10);
+		lCavallery.setY(this.view.getCellSideLength() * 10);
+		this.getView().getSceneManager().getGameScene().attachChild(lCavallery);
 		// ---------------------------------------------------------------
 		// XXX SnowParticleSystem - Test
 		// ---------------------------------------------------------------

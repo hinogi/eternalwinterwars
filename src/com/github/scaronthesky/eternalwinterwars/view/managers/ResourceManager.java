@@ -41,8 +41,13 @@ public class ResourceManager extends AManager {
 	private ITextureRegion gTextureRegionControlKnob;
 	private ITextureRegion gTextureRegionAttack;
 	private ITextureRegion gTextureRegionCancel;
+	private ITextureRegion gTextureRegionArrow;
+	private ITextureRegion gTextureRegionStone;
 	private ITiledTextureRegion gTiledTextureRegionButton;
-	private ITiledTextureRegion gTiledTextureRegionTestUnitMove;
+	private ITiledTextureRegion gTiledTextureRegionKnight;
+	private ITiledTextureRegion gTiledTextureRegionMarksman;
+	private ITiledTextureRegion gTiledTextureRegionArtillery;
+	private ITiledTextureRegion gTiledTextureRegionCavallery;
 	private ITiledTextureRegion gTiledTextureRegionBlood;
 
 	// -----------------------------------------------------
@@ -77,6 +82,10 @@ public class ResourceManager extends AManager {
 		this.addImageResourcesIterative(64, 64, "gfx/mountains");
 		this.addImageResourcesIterative(64, 64, "gfx/rivers");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.gTextureRegionArrow = this.loadImageResource(64, 64,
+				"effects/Arrow_v1.png");
+		this.gTextureRegionStone = this.loadImageResource(64, 64,
+				"effects/Stone_v1.png");
 		this.gTextureRegionMenuBackground = this.loadImageResource(1920, 1080,
 				"backgrounds/bg_v3.png");
 		this.gTextureRegionButtonSettings = this.loadImageResource(80, 80,
@@ -99,8 +108,14 @@ public class ResourceManager extends AManager {
 				.loadImageResource(64, 64, "cancel.png");
 		this.gTiledTextureRegionButton = this.loadTiledImageResource(371, 600,
 				"button.png", 1, 3);
-		this.gTiledTextureRegionTestUnitMove = this.loadTiledImageResource(256,
-				384, "units/knights/Knight_v1.png", 4, 6);
+		this.gTiledTextureRegionKnight = this.loadTiledImageResource(256, 384,
+				"units/knights/Knight_v1.png", 4, 6);
+		this.gTiledTextureRegionMarksman = this.loadTiledImageResource(256,
+				384, "units/marksmen/Marksmen_v1.png", 4, 6);
+		this.gTiledTextureRegionArtillery = this.loadTiledImageResource(256,
+				384, "units/artillery/Artillery_v1.png", 4, 6);
+		this.gTiledTextureRegionCavallery = this.loadTiledImageResource(256,
+				384, "units/cavallery/Cavallery_v1.png", 4, 6);
 		this.gTiledTextureRegionBlood = this.loadTiledImageResource(384, 64,
 				"effects/Blood_v2.png", 6, 1);
 		this.gFontButton = this.loadFont((int) (512 * this.getController()
@@ -306,8 +321,20 @@ public class ResourceManager extends AManager {
 		return this.gTiledTextureRegionButton;
 	}
 
-	public ITiledTextureRegion getTiledTextureRegionTestUnitMove() {
-		return this.gTiledTextureRegionTestUnitMove;
+	public ITiledTextureRegion getTiledTextureRegionKnight() {
+		return this.gTiledTextureRegionKnight;
+	}
+
+	public ITiledTextureRegion getTiledTextureRegionMarksman() {
+		return this.gTiledTextureRegionMarksman;
+	}
+
+	public ITiledTextureRegion getTiledTextureRegionArtillery() {
+		return this.gTiledTextureRegionArtillery;
+	}
+
+	public ITiledTextureRegion getTiledTextureRegionCavallery() {
+		return this.gTiledTextureRegionCavallery;
 	}
 
 	public Font getFontButton() {
@@ -372,5 +399,13 @@ public class ResourceManager extends AManager {
 
 	public ITiledTextureRegion getTiledTextureRegionBlood() {
 		return this.gTiledTextureRegionBlood;
+	}
+
+	public ITextureRegion getTextureRegionArrow() {
+		return this.gTextureRegionArrow;
+	}
+
+	public ITextureRegion getTextureRegionStone() {
+		return this.gTextureRegionStone;
 	}
 }

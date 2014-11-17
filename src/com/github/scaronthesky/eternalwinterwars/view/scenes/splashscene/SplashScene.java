@@ -10,6 +10,7 @@ import org.andengine.util.modifier.IModifier;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager.SceneType;
 import com.github.scaronthesky.eternalwinterwars.view.scenes.AControllerScene;
+
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
@@ -42,12 +43,17 @@ public class SplashScene extends AControllerScene {
 								.getSceneManager().load();
 						SplashScene.this.getController().getView()
 								.getSoundManager().load();
+						SplashScene.this.getController().getView()
+								.getAnimationPropertiesManager().load();
+						SplashScene.this.getController().getView()
+								.getGameBaseEntityManager().load();
 					}
 
 					@Override
 					public void onModifierFinished(
 							IModifier<IEntity> pModifier, IEntity pItem) {
-						getController().getModel().displayBoard();
+						SplashScene.this.getController().getModel()
+								.displayBoard();
 						SplashScene.this.getController().getView()
 								.getSceneManager()
 								.setActualSceneType(pNewScene);

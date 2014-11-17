@@ -20,7 +20,7 @@ import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animation
  * @since 20.10.2014
  * 
  */
-public class UnitEntity extends AGameBaseEntity {
+public class UnitEntity extends AGameBaseEntity implements Cloneable {
 	private MultiTextureAnimatedSprite gMultiTextureAnimatedSprite;
 	private Map<String, AnimationProperties> gAnimationProperties;
 	private boolean gMarked;
@@ -45,13 +45,10 @@ public class UnitEntity extends AGameBaseEntity {
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				// XXX TEST!!!
 				if (pSceneTouchEvent.isActionDown()) {
-					UnitEntity.this.getController().getView().getSceneManager()
-							.getGameScene()
-							.showAttackOrCancelDialogue(UnitEntity.this);
-					if (UnitEntity.this.gMarked) {
-						UnitEntity.this.getController().getView()
-								.getSceneManager().getGameScene().removeMark();
-					} else {
+					// UnitEntity.this.getController().getView().getSceneManager()
+					// .getGameScene()
+					// .showAttackOrCancelDialogue(UnitEntity.this);
+					if (!UnitEntity.this.gMarked) {
 						List<float[]> lStartCoordinates = new ArrayList<float[]>();
 						Controller lController = (Controller) UnitEntity.this
 								.getController();
@@ -59,6 +56,9 @@ public class UnitEntity extends AGameBaseEntity {
 								.getLogicalCoordinate(pSceneTouchEvent.getX());
 						int lRow = lController
 								.getLogicalCoordinate(pSceneTouchEvent.getY());
+						lStartCoordinates.add(new float[] {
+								lController.getAbsoluteCoordinate(lColumn),
+								lController.getAbsoluteCoordinate(lRow) });
 						lStartCoordinates.add(new float[] {
 								lController.getAbsoluteCoordinate(lColumn + 1),
 								lController.getAbsoluteCoordinate(lRow) });
@@ -76,15 +76,16 @@ public class UnitEntity extends AGameBaseEntity {
 								.mark(UnitEntity.this, lStartCoordinates);
 					}
 					UnitEntity.this.gMarked = !UnitEntity.this.gMarked;
+					UnitEntity.this.gMarked = !UnitEntity.this.gMarked;
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX,
 						pTouchAreaLocalY);
 			}
 		};
-		pParentScene.registerTouchArea(this.gMultiTextureAnimatedSprite);
+		this.registerTouchArea();
 		this.attachChild(this.gMultiTextureAnimatedSprite);
-		AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
-				pAnimationProperties.get(pStartTileId));
+		// AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
+		// pAnimationProperties.get(pStartTileId));
 	}
 
 	public MultiTextureAnimatedSprite getMultiTextureAnimatedSprite() {
@@ -108,8 +109,13 @@ public class UnitEntity extends AGameBaseEntity {
 	}
 
 	public void animate(String pAnimationKey) {
-		AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
-				this.gAnimationProperties.get(pAnimationKey));
+		if (this.gAnimationProperties.containsKey(pAnimationKey)) {
+			AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
+					this.gAnimationProperties.get(pAnimationKey));
+		} else if (this.gMultiTextureAnimatedSprite.isAnimationRunning()) {
+			// IDLE missing
+			this.gMultiTextureAnimatedSprite.stopAnimation();
+		}
 	}
 
 	@Override
@@ -131,4 +137,17 @@ public class UnitEntity extends AGameBaseEntity {
 		this.gMarked = pMarked;
 	}
 
+	public UnitEntity copy() {
+		try {
+			return (UnitEntity) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void registerTouchArea() {
+		this.getParentScene().registerTouchArea(
+				this.gMultiTextureAnimatedSprite);
+	}
 }

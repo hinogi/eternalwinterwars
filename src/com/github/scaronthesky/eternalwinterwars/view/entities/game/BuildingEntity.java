@@ -6,6 +6,7 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.color.Color;
 
+import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationSuddenAppearEffect;
@@ -15,7 +16,7 @@ import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animation
  * @since 20.10.2014
  * 
  */
-public class BuildingEntity extends AGameBaseEntity {
+public class BuildingEntity extends AGameBaseEntity implements Cloneable {
 	private Sprite gSingleTextureSprite;
 
 	/**
@@ -46,17 +47,19 @@ public class BuildingEntity extends AGameBaseEntity {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionDown()) {
-					BuildingEntity.this.getHealthBar().setActualHealth(
-							BuildingEntity.this.getHealthBar()
-									.getActualHealth() - 5);
-					BuildingEntity.this.changeHealthBarVisibility();
-					BuildingEntity.this.sufferFromAttack();
+					BuildingEntity.this
+							.getController()
+							.getView()
+							.getSceneManager()
+							.getGameScene()
+							.attack(Controller.testMarksman,
+									BuildingEntity.this, 5, false);
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX,
 						pTouchAreaLocalY);
 			}
 		};
-		this.getParentScene().registerTouchArea(this.gSingleTextureSprite);
+		this.registerTouchArea();
 		this.attachChild(this.gSingleTextureSprite);
 	}
 
@@ -86,5 +89,18 @@ public class BuildingEntity extends AGameBaseEntity {
 	@Override
 	public float getHeight() {
 		return this.gSingleTextureSprite.getHeight();
+	}
+
+	public BuildingEntity copy() {
+		try {
+			return (BuildingEntity) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void registerTouchArea() {
+		this.getParentScene().registerTouchArea(this.gSingleTextureSprite);
 	}
 }

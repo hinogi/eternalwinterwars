@@ -1,6 +1,8 @@
 package com.github.scaronthesky.eternalwinterwars.model;
 
 import com.github.scaronthesky.eternalwinterwars.model.cellcontrol.CellControl;
+import com.github.scaronthesky.eternalwinterwars.model.editorcontrol.EditorControl;
+
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
@@ -12,6 +14,8 @@ public interface IModel {
 	public void finishEditing();
 
 	public CellControl getCellControl();
+
+	public EditorControl getEditorControl();
 
 	public void displayBoard();
 }
