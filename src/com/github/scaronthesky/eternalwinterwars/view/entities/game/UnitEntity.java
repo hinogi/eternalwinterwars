@@ -11,16 +11,16 @@ import org.andengine.util.color.Color;
 
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.view.AnimationExecutor;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.multitexture.MultiTextureAnimatedSprite;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
+import com.github.scaronthesky.eternalwinterwars.view.util.AnimationExecutor;
 
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
  * 
  */
-public class UnitEntity extends AGameBaseEntity implements Cloneable {
+public class UnitEntity extends AGameBaseEntity {
 	private MultiTextureAnimatedSprite gMultiTextureAnimatedSprite;
 	private Map<String, AnimationProperties> gAnimationProperties;
 	private boolean gMarked;
@@ -75,7 +75,6 @@ public class UnitEntity extends AGameBaseEntity implements Cloneable {
 								.getSceneManager().getGameScene()
 								.mark(UnitEntity.this, lStartCoordinates);
 					}
-					UnitEntity.this.gMarked = !UnitEntity.this.gMarked;
 					UnitEntity.this.gMarked = !UnitEntity.this.gMarked;
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX,
@@ -135,15 +134,6 @@ public class UnitEntity extends AGameBaseEntity implements Cloneable {
 
 	public void setMarked(boolean pMarked) {
 		this.gMarked = pMarked;
-	}
-
-	public UnitEntity copy() {
-		try {
-			return (UnitEntity) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	public void registerTouchArea() {

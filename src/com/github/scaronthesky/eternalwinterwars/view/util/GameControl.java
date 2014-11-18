@@ -1,4 +1,4 @@
-package com.github.scaronthesky.eternalwinterwars.view;
+package com.github.scaronthesky.eternalwinterwars.view.util;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.model.Model;

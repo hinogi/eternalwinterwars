@@ -14,7 +14,7 @@ import org.andengine.opengl.texture.region.ITextureRegion;
 import android.opengl.GLES20;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.view.Constants;
+import com.github.scaronthesky.eternalwinterwars.view.constants.Constants;
 
 /**
  * @author Manuel Seiche

@@ -1,4 +1,4 @@
-package com.github.scaronthesky.eternalwinterwars.view;
+package com.github.scaronthesky.eternalwinterwars;
 
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.options.EngineOptions;

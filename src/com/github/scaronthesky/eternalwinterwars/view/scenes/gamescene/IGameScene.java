@@ -32,6 +32,10 @@ public interface IGameScene {
 	 */
 	public void mark(UnitEntity pSource, List<float[]> pStartCoordinates);
 
+	public void showFogOfWar(List<int[]> pVisibleFogRectangles);
+
+	public void hideFogOfWar();
+
 	/**
 	 * Removes the {@link Mark}
 	 */

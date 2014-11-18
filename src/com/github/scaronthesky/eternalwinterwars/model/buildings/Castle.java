@@ -2,8 +2,6 @@ package com.github.scaronthesky.eternalwinterwars.model.buildings;
 
 import java.util.UUID;
 
-import org.andengine.entity.sprite.Sprite;
-
 import com.github.scaronthesky.eternalwinterwars.model.buildings.producebehaviours.ProducesUnits;
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 import com.github.scaronthesky.eternalwinterwars.model.units.bluntarmamentbehaviour.BadBluntDefense;
@@ -15,8 +13,8 @@ import com.github.scaronthesky.eternalwinterwars.model.units.sightbehaviours.Uni
 
 public class Castle extends Building {
 
-	public Castle(UUID uuid, Sprite sprite, Player owner) {
-		super(uuid, owner, sprite);
+	public Castle(UUID uuid, String spriteKey, Player owner) {
+		super(uuid, owner, spriteKey);
 		setProduceBehavior(new ProducesUnits());
 		setHealthBehaviour(new WeakHealth());
 		setPiercingWeaponBehaviour(new Bow());

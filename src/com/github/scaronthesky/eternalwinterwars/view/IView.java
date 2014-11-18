@@ -1,12 +1,13 @@
 package com.github.scaronthesky.eternalwinterwars.view;
 
+import com.github.scaronthesky.eternalwinterwars.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Board;
 import com.github.scaronthesky.eternalwinterwars.view.managers.AnimationPropertiesManager;
-import com.github.scaronthesky.eternalwinterwars.view.managers.GameBaseEntityManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.HUDManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.ResourceManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager;
+import com.github.scaronthesky.eternalwinterwars.view.util.builders.GameBaseEntityBuilder;
 
 /**
  * @author Manuel Seiche
@@ -24,8 +25,6 @@ public interface IView {
 	public ResourceManager getResourceManager();
 
 	public AnimationPropertiesManager getAnimationPropertiesManager();
-
-	public GameBaseEntityManager getGameBaseEntityManager();
 
 	public void limitCameraBoundsToBoard(MainActivity pMainActivity,
 			Board pBoard);

@@ -20,8 +20,9 @@ import android.graphics.Point;
 
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.view.Constants;
+import com.github.scaronthesky.eternalwinterwars.view.constants.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Board;
+import com.github.scaronthesky.eternalwinterwars.view.entities.board.FogOfWar;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Mark;
 import com.github.scaronthesky.eternalwinterwars.view.entities.dialogues.AttackOrCancelDialogue;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
@@ -39,6 +40,7 @@ public class GameScene extends AControllerScene implements
 		IOnSceneTouchListener, IGameScene {
 	private Board gBoard;
 	private Mark gMark;
+	private FogOfWar gFogOfWar;
 	private boolean gLocked;
 	private AttackOrCancelDialogue gAttackOrCancelDialogue;
 
@@ -59,6 +61,8 @@ public class GameScene extends AControllerScene implements
 	 */
 	@Override
 	public void initialize() {
+		this.gFogOfWar = new FogOfWar(this.getController());
+		this.attachChildOnLayer(this.gFogOfWar, 4);
 		this.setTouchAreaBindingOnActionDownEnabled(true);
 		this.setOnSceneTouchListener(this);
 	}
@@ -342,6 +346,11 @@ public class GameScene extends AControllerScene implements
 								IModifier<IEntity> pModifier, IEntity pItem) {
 							pUnit.animate(Constants.ANIMATION_KEY_IDLE);
 							pUnit.setMarked(false);
+							GameScene.this.getController().testFogOfWar(
+									GameScene.this.getController()
+											.getBaseGameEntityMapper()
+											.getUnit(pUnit).getOwner()
+											.getIndex());
 						}
 					});
 			this.registerEntityModifier(lDelayModifier);
@@ -432,5 +441,24 @@ public class GameScene extends AControllerScene implements
 
 	public boolean isLocked() {
 		return this.gLocked;
+	}
+
+	@Override
+	public void showFogOfWar(List<int[]> pVisibleFogRectangles) {
+		this.gFogOfWar.enableFog();
+		for (int[] lVisibleFogRectangle : pVisibleFogRectangles) {
+			this.gFogOfWar.disableFog(lVisibleFogRectangle[0],
+					lVisibleFogRectangle[1]);
+		}
+		if (!this.gFogOfWar.isVisible()) {
+			this.gFogOfWar.setVisible(true);
+		}
+	}
+
+	@Override
+	public void hideFogOfWar() {
+		if (this.gFogOfWar.isVisible()) {
+			this.gFogOfWar.setVisible(false);
+		}
 	}
 }

@@ -2,9 +2,10 @@ package com.github.scaronthesky.eternalwinterwars.controller;
 
 import org.andengine.input.touch.TouchEvent;
 
+import com.github.scaronthesky.eternalwinterwars.MainActivity;
+import com.github.scaronthesky.eternalwinterwars.controller.mapping.BaseGameEntityMapper;
 import com.github.scaronthesky.eternalwinterwars.model.IModel;
 import com.github.scaronthesky.eternalwinterwars.view.IView;
-import com.github.scaronthesky.eternalwinterwars.view.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 
 /**
@@ -33,8 +34,15 @@ public interface IController {
 
 	public void handleCancelButtonClicked(UnitEntity pUnitEntity);
 
+	public BaseGameEntityMapper getBaseGameEntityMapper();
+
 	/**
 	 * XXX Test
 	 */
 	public void startTest();
+
+	/**
+	 * XXX Test
+	 */
+	void testFogOfWar(int pPlayerIndex);
 }

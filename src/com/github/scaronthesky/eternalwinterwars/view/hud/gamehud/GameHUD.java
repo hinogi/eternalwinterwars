@@ -11,7 +11,7 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.model.Model;
-import com.github.scaronthesky.eternalwinterwars.view.Constants;
+import com.github.scaronthesky.eternalwinterwars.view.constants.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.hud.ControllerHUD;
 
 /**

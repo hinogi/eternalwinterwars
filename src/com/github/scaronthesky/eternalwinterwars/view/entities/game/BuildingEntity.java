@@ -6,7 +6,6 @@ import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.region.ITextureRegion;
 import org.andengine.util.color.Color;
 
-import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationSuddenAppearEffect;
@@ -16,7 +15,7 @@ import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animation
  * @since 20.10.2014
  * 
  */
-public class BuildingEntity extends AGameBaseEntity implements Cloneable {
+public class BuildingEntity extends AGameBaseEntity {
 	private Sprite gSingleTextureSprite;
 
 	/**
@@ -47,13 +46,13 @@ public class BuildingEntity extends AGameBaseEntity implements Cloneable {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionDown()) {
-					BuildingEntity.this
-							.getController()
-							.getView()
-							.getSceneManager()
-							.getGameScene()
-							.attack(Controller.testMarksman,
-									BuildingEntity.this, 5, false);
+					// BuildingEntity.this
+					// .getController()
+					// .getView()
+					// .getSceneManager()
+					// .getGameScene()
+					// .attack(Controller.testMarksman,
+					// BuildingEntity.this, 5, false);
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX,
 						pTouchAreaLocalY);
@@ -89,15 +88,6 @@ public class BuildingEntity extends AGameBaseEntity implements Cloneable {
 	@Override
 	public float getHeight() {
 		return this.gSingleTextureSprite.getHeight();
-	}
-
-	public BuildingEntity copy() {
-		try {
-			return (BuildingEntity) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 
 	public void registerTouchArea() {

@@ -15,7 +15,7 @@ import com.github.scaronthesky.eternalwinterwars.model.units.sightbehaviours.Uni
 public abstract class FightingEntity {
 
 	private UUID uuid;
-	private Sprite sprite;
+	private String spriteKey;
 	private Player owner;
 	private int health;
 	private HealthBehaviour healthBehaviour;
@@ -30,13 +30,13 @@ public abstract class FightingEntity {
 	 * 
 	 * @param uuid
 	 *            the UUID
-	 * @param sprite
-	 *            the graphics sprite.
+	 * @param spriteKey
+	 *            the graphics sprite key
 	 */
-	public FightingEntity(UUID uuid, Sprite sprite, Player owner) {
+	public FightingEntity(UUID uuid, String spriteKey, Player owner) {
 		super();
 		this.uuid = uuid;
-		this.sprite = sprite;
+		this.spriteKey = spriteKey;
 		this.owner = owner;
 	}
 
@@ -56,18 +56,18 @@ public abstract class FightingEntity {
 	}
 
 	/**
-	 * @return the sprite
+	 * @return the spriteKey
 	 */
-	public Sprite getSprite() {
-		return sprite;
+	public String getSpriteKey() {
+		return spriteKey;
 	}
 
 	/**
-	 * @param sprite
-	 *            the sprite to set
+	 * @param spriteKey
+	 *            the spriteKey to set
 	 */
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public void setSpriteKey(String spriteKey) {
+		this.spriteKey = spriteKey;
 	}
 
 	/**

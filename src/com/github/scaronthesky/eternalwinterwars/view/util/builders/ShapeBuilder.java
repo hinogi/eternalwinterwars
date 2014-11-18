@@ -1,4 +1,4 @@
-package com.github.scaronthesky.eternalwinterwars.view;
+package com.github.scaronthesky.eternalwinterwars.view.util.builders;
 
 import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;

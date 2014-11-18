@@ -3,8 +3,6 @@ package com.github.scaronthesky.eternalwinterwars.model.units;
 
 import java.util.UUID;
 
-import org.andengine.entity.sprite.Sprite;
-
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 import com.github.scaronthesky.eternalwinterwars.model.units.bluntarmamentbehaviour.BadBluntDefense;
 import com.github.scaronthesky.eternalwinterwars.model.units.bluntweaponbehaviours.NoBluntWeapon;
@@ -17,8 +15,8 @@ import com.github.scaronthesky.eternalwinterwars.model.units.sightbehaviours.Uni
 
 public class Archer extends Unit {
 
-	public Archer(UUID uuid, Sprite sprite, Player owner) {
-		super(uuid, sprite, owner);
+	public Archer(UUID uuid, String spriteKey, Player owner) {
+		super(uuid, spriteKey, owner);
 		setHealthBehaviour(new WeakHealth());
 		setMovementBehaviour(new UnitFastSpeed());
 		setPiercingWeaponBehaviour(new Bow());

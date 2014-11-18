@@ -45,8 +45,6 @@ public class SplashScene extends AControllerScene {
 								.getSoundManager().load();
 						SplashScene.this.getController().getView()
 								.getAnimationPropertiesManager().load();
-						SplashScene.this.getController().getView()
-								.getGameBaseEntityManager().load();
 					}
 
 					@Override

@@ -1,10 +1,10 @@
 package com.github.scaronthesky.eternalwinterwars.view;
 
+import com.github.scaronthesky.eternalwinterwars.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Board;
 import com.github.scaronthesky.eternalwinterwars.view.managers.AnimationPropertiesManager;
-import com.github.scaronthesky.eternalwinterwars.view.managers.GameBaseEntityManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.HUDManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.ResourceManager;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager;
@@ -23,7 +23,6 @@ public class View implements IView {
 	private SceneManager gSceneManager;
 	private SoundManager gSoundManager;
 	private AnimationPropertiesManager gAnimationPropertiesManager;
-	private GameBaseEntityManager gGameBaseEntityManager;
 
 	/**
 	 * Creates an instance of {@link View}
@@ -42,8 +41,6 @@ public class View implements IView {
 		this.gSceneManager = new SceneManager(this.gController);
 		this.gSoundManager = new SoundManager(this.gController);
 		this.gAnimationPropertiesManager = new AnimationPropertiesManager(
-				this.gController);
-		this.gGameBaseEntityManager = new GameBaseEntityManager(
 				this.gController);
 	}
 
@@ -80,13 +77,8 @@ public class View implements IView {
 	}
 
 	@Override
-	public GameBaseEntityManager getGameBaseEntityManager() {
-		return this.gGameBaseEntityManager;
-	}
-
-	@Override
 	public float getCellSideLength() {
-		return this.gController.getMainActivity().getSmoothCamera().getWidth()
+		return this.gController.getMainActivity().getSmoothCamera().getHeight()
 				* Board.DEFAULT_CELL_BOUNDS_FACTOR;
 	}
 }
