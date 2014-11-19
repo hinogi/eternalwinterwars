@@ -5,7 +5,9 @@ import org.andengine.input.touch.TouchEvent;
 import com.github.scaronthesky.eternalwinterwars.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.controller.mapping.BaseGameEntityMapper;
 import com.github.scaronthesky.eternalwinterwars.model.IModel;
+import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
 import com.github.scaronthesky.eternalwinterwars.view.IView;
+import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 
 /**
@@ -36,6 +38,13 @@ public interface IController {
 
 	public BaseGameEntityMapper getBaseGameEntityMapper();
 
+	public void moveUnit(UnitEntity pUnitEntity, float pX, float pY);
+
+	public void attack(UnitEntity pAttackingUnit,
+			AGameBaseEntity pDefendingEntity);
+
+	public void changePlayer();
+
 	/**
 	 * XXX Test
 	 */
@@ -44,5 +53,9 @@ public interface IController {
 	/**
 	 * XXX Test
 	 */
-	void testFogOfWar(int pPlayerIndex);
+	public void showFogOfWar(int pPlayerIndex);
+
+	public int getLogicalCoordinate(float pAbsoluteCoordinate);
+
+	public float getAbsoluteCoordinate(int pLogicalCoordinate);
 }

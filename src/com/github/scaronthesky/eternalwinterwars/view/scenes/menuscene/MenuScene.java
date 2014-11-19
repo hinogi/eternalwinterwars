@@ -3,6 +3,7 @@ package com.github.scaronthesky.eternalwinterwars.view.scenes.menuscene;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.scene.menu.item.IMenuItem;
 import org.andengine.entity.sprite.Sprite;
@@ -13,6 +14,7 @@ import com.github.scaronthesky.eternalwinterwars.view.hud.AnimatedButtonSpriteMe
 import com.github.scaronthesky.eternalwinterwars.view.managers.HUDManager.HUDType;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager.SceneType;
 import com.github.scaronthesky.eternalwinterwars.view.scenes.AControllerMenuScene;
+
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
@@ -48,26 +50,6 @@ public class MenuScene extends AControllerMenuScene {
 		this.addMenuItems();
 		this.setOnMenuItemClickListener(this);
 		this.buildAnimations();
-	}
-
-	/**
-	 * Centers all buttons on the screen
-	 */
-	private void updateButtonPositions() {
-		float lButtonHeight = this.gMenuButtons.get(0).getHeightScaled();
-		float lSpaceWidth = lButtonHeight / 3;
-		float lAddedHeight = this.gMenuButtons.size()
-				* (lButtonHeight + lSpaceWidth);
-		float lPositionY = this.getController().getMainActivity().getEngine()
-				.getCamera().getHeight()
-				/ 2 - lAddedHeight / 2;
-		for (AnimatedButtonSpriteMenuItem lMenuButton : this.gMenuButtons) {
-			lMenuButton.setY(lPositionY);
-			lPositionY += lButtonHeight + lSpaceWidth;
-			lMenuButton.setX(this.getController().getMainActivity().getEngine()
-					.getCamera().getWidth()
-					/ 2 - lMenuButton.getWidth() / 2);
-		}
 	}
 
 	/**
@@ -122,20 +104,20 @@ public class MenuScene extends AControllerMenuScene {
 			org.andengine.entity.scene.menu.MenuScene pMenuScene,
 			IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY) {
 		switch (pMenuItem.getID()) {
-			case MN_START :
-				this.getController().getView().getSceneManager()
-						.setActualSceneType(SceneType.GAME);
-				this.getController().getView().getHUDManager()
-						.attachHUD(HUDType.GAME);
-				this.getController().startTest();
-				return true;
-			case MN_EDITOR :
-				this.getController().startEditing();
-				this.getController().getView().getSceneManager()
-						.setActualSceneType(SceneType.EDITOR);
-				return true;
-			default :
-				return false;
+		case MN_START:
+			this.getController().getView().getSceneManager()
+					.setActualSceneType(SceneType.GAME);
+			this.getController().getView().getHUDManager()
+					.attachHUD(HUDType.GAME);
+			this.getController().startTest();
+			return true;
+		case MN_EDITOR:
+			this.getController().startEditing();
+			this.getController().getView().getSceneManager()
+					.setActualSceneType(SceneType.EDITOR);
+			return true;
+		default:
+			return false;
 		}
 	}
 }

@@ -107,4 +107,9 @@ public class EditorScene extends AControllerScene implements IEditorScene,
 	public float getSpriteSideLength() {
 		return this.gSpriteSideLength;
 	}
+
+	@Override
+	public Scene getInstance() {
+		return this;
+	}
 }

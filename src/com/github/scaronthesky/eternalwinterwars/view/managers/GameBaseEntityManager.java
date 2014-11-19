@@ -28,8 +28,8 @@ public class GameBaseEntityManager extends AManager {
 	public UnitEntity createKnight(float pCellSideLength,
 			Color pForegroundRect, Color pBackgroundRect) {
 		return new UnitEntity(this.getController(), this.getController()
-				.getView().getSceneManager().getGameScene(), pCellSideLength,
-				pCellSideLength
+				.getView().getSceneManager().getGameScene().getInstance(),
+				pCellSideLength, pCellSideLength
 						* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
 				Constants.GAME_BASE_ENTITY_UNIT_KNIGHT_HEALTH,
 				Constants.GAME_BASE_ENTITY_UNIT_KNIGHT_HEALTH, pForegroundRect,
@@ -42,9 +42,9 @@ public class GameBaseEntityManager extends AManager {
 	public UnitEntity createMarksman(float pCellSideLength,
 			Color pForegroundRect, Color pBackgroundRect) {
 		UnitEntity lMarksman = new UnitEntity(this.getController(), this
-				.getController().getView().getSceneManager().getGameScene(),
-				pCellSideLength, pCellSideLength
-						* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
+				.getController().getView().getSceneManager().getGameScene()
+				.getInstance(), pCellSideLength, pCellSideLength
+				* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
 				Constants.GAME_BASE_ENTITY_UNIT_MARKSMAN_HEALTH,
 				Constants.GAME_BASE_ENTITY_UNIT_MARKSMAN_HEALTH,
 				pForegroundRect, pBackgroundRect, true, this.getController()
@@ -62,9 +62,9 @@ public class GameBaseEntityManager extends AManager {
 	public UnitEntity createArtillery(float pCellSideLength,
 			Color pForegroundRect, Color pBackgroundRect) {
 		UnitEntity lArtillery = new UnitEntity(this.getController(), this
-				.getController().getView().getSceneManager().getGameScene(),
-				pCellSideLength, pCellSideLength
-						* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
+				.getController().getView().getSceneManager().getGameScene()
+				.getInstance(), pCellSideLength, pCellSideLength
+				* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
 				Constants.GAME_BASE_ENTITY_UNIT_ARTILLERY_HEALTH,
 				Constants.GAME_BASE_ENTITY_UNIT_ARTILLERY_HEALTH,
 				pForegroundRect, pBackgroundRect, true, this.getController()
@@ -82,8 +82,8 @@ public class GameBaseEntityManager extends AManager {
 	public UnitEntity createCavallery(float pCellSideLength,
 			Color pForegroundRect, Color pBackgroundRect) {
 		return new UnitEntity(this.getController(), this.getController()
-				.getView().getSceneManager().getGameScene(), pCellSideLength,
-				pCellSideLength
+				.getView().getSceneManager().getGameScene().getInstance(),
+				pCellSideLength, pCellSideLength
 						* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
 				Constants.GAME_BASE_ENTITY_UNIT_CAVALLERY_HEALTH,
 				Constants.GAME_BASE_ENTITY_UNIT_CAVALLERY_HEALTH,
@@ -97,8 +97,8 @@ public class GameBaseEntityManager extends AManager {
 			Color pForegroundRect, Color pBackgroundRect,
 			ITextureRegion pTextureRegion) {
 		return new BuildingEntity(this.getController(), this.getController()
-				.getView().getSceneManager().getGameScene(), pCellSideLength,
-				pCellSideLength
+				.getView().getSceneManager().getGameScene().getInstance(),
+				pCellSideLength, pCellSideLength
 						* Constants.GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC,
 				Constants.GAME_BASE_ENTITY_BUILDING_CASTLE_HEALTH,
 				Constants.GAME_BASE_ENTITY_BUILDING_CASTLE_HEALTH,

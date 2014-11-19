@@ -11,12 +11,14 @@ import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.controller.constants.Constants;
 import com.github.scaronthesky.eternalwinterwars.model.buildings.Building;
 import com.github.scaronthesky.eternalwinterwars.model.buildings.Castle;
+import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 import com.github.scaronthesky.eternalwinterwars.model.units.Archer;
 import com.github.scaronthesky.eternalwinterwars.model.units.Catapult;
 import com.github.scaronthesky.eternalwinterwars.model.units.Cavalry;
 import com.github.scaronthesky.eternalwinterwars.model.units.Knight;
 import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
+import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.BuildingEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.util.builders.GameBaseEntityBuilder;
@@ -48,6 +50,41 @@ public class BaseGameEntityMapper {
 
 	public List<Building> getAllBuildings(Player pOwner) {
 		return this.getAllBuildings(pOwner.getIndex());
+	}
+
+	public List<FightingEntity> getAllFightingEntities(Player pOwner) {
+		return this.getAllFightingEntities(pOwner.getIndex());
+	}
+
+	public List<FightingEntity> getAllFightingEntities(int pPlayerIndex) {
+		List<FightingEntity> lAllFightingEntities = new LinkedList<FightingEntity>();
+		lAllFightingEntities.addAll(getAllUnits(pPlayerIndex));
+		lAllFightingEntities.addAll(getAllFightingEntities(pPlayerIndex));
+		return lAllFightingEntities;
+	}
+
+	public List<AGameBaseEntity> getAllGameBaseEntities(int pPlayerIndex) {
+		List<AGameBaseEntity> lAllGameBaseEntities = new LinkedList<AGameBaseEntity>();
+		lAllGameBaseEntities.addAll(getAllUnitEntities(pPlayerIndex));
+		lAllGameBaseEntities.addAll(getAllBuildingEntities(pPlayerIndex));
+		return lAllGameBaseEntities;
+	}
+
+	public List<UnitEntity> getAllUnitEntities(int pPlayerIndex) {
+		List<UnitEntity> lAllUnitEntities = new LinkedList<UnitEntity>();
+		for (UnitEntity lUnitEntity : gUnitMap.get(pPlayerIndex).values()) {
+			lAllUnitEntities.add(lUnitEntity);
+		}
+		return lAllUnitEntities;
+	}
+
+	public List<BuildingEntity> getAllBuildingEntities(int pPlayerIndex) {
+		List<BuildingEntity> lAllBuildingEntities = new LinkedList<BuildingEntity>();
+		for (BuildingEntity lBuildingEntity : gBuildingMap.get(pPlayerIndex)
+				.values()) {
+			lAllBuildingEntities.add(lBuildingEntity);
+		}
+		return lAllBuildingEntities;
 	}
 
 	public List<Building> getAllBuildings(int pPlayerIndex) {
@@ -185,5 +222,13 @@ public class BaseGameEntityMapper {
 
 	public BuildingEntity getBuildingEntity(int pPlayerIndex, Building pBuilding) {
 		return this.gBuildingMap.get(pPlayerIndex).get(pBuilding);
+	}
+
+	public int getPlayerIndex(UnitEntity pUnitEntity) {
+		return getUnit(pUnitEntity).getOwner().getIndex();
+	}
+
+	public int getPlayerIndex(BuildingEntity pBuildingEntity) {
+		return getBuilding(pBuildingEntity).getOwner().getIndex();
 	}
 }

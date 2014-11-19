@@ -3,6 +3,7 @@ package com.github.scaronthesky.eternalwinterwars.view.scenes.splashscene;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.util.modifier.IModifier;
@@ -16,7 +17,7 @@ import com.github.scaronthesky.eternalwinterwars.view.scenes.AControllerScene;
  * @since 20.10.2014
  * 
  */
-public class SplashScene extends AControllerScene {
+public class SplashScene extends AControllerScene implements ISplashScene {
 
 	public SplashScene(IController pController) {
 		super(pController);
@@ -27,6 +28,7 @@ public class SplashScene extends AControllerScene {
 		this.createBackground();
 	}
 
+	@Override
 	public void loadAndChangeScene(final SceneType pNewScene) {
 		DelayModifier lDelayModifier = new DelayModifier(5,
 				new IEntityModifierListener() {
@@ -69,5 +71,10 @@ public class SplashScene extends AControllerScene {
 				.getController().getMainActivity()
 				.getVertexBufferObjectManager());
 		this.setBackground(new SpriteBackground(lBackgroundSprite));
+	}
+
+	@Override
+	public Scene getInstance() {
+		return this;
 	}
 }

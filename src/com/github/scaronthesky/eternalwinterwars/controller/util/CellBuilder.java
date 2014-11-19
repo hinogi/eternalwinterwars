@@ -21,6 +21,13 @@ public abstract class CellBuilder {
 		}
 	}
 
+	/**
+	 * XXX For MapBuilderExt - Generation
+	 */
+	public static Plain buildDefaultPlain(String pSpriteKey) {
+		return new Plain(UUID.randomUUID(), null, null);
+	}
+
 	public static Plain buildDefaultPlain() {
 		return new Plain(UUID.randomUUID(), null, null);
 	}

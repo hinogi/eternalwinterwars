@@ -13,18 +13,19 @@ import com.github.scaronthesky.eternalwinterwars.controller.util.CellBuilder;
 import com.github.scaronthesky.eternalwinterwars.model.IModel;
 import com.github.scaronthesky.eternalwinterwars.model.Model;
 import com.github.scaronthesky.eternalwinterwars.model.editorcontrol.EditorControl;
+import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
 import com.github.scaronthesky.eternalwinterwars.model.units.Archer;
 import com.github.scaronthesky.eternalwinterwars.model.units.Knight;
 import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
 import com.github.scaronthesky.eternalwinterwars.view.IView;
 import com.github.scaronthesky.eternalwinterwars.view.View;
+import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.BuildingEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager.SceneType;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager.MusicType;
-import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager.SoundType;
 import com.github.scaronthesky.eternalwinterwars.view.particles.ParticleSystemBuilder;
-import com.github.scaronthesky.eternalwinterwars.view.scenes.editorscene.EditorScene;
+import com.github.scaronthesky.eternalwinterwars.view.scenes.editorscene.IEditorScene;
 import com.github.scaronthesky.eternalwinterwars.view.util.GameControl;
 
 public class Controller implements IController {
@@ -92,11 +93,12 @@ public class Controller implements IController {
 				this.model.getPlayers()[1]);
 		this.baseGameEntityMapper.mapUnit(knight);
 		UnitEntity testKnight = this.baseGameEntityMapper.getUnitEntity(knight);
+		testKnight.setClickable(false);
 		testKnight.setX(this.getView().getCellSideLength() * 10);
 		testKnight.setY(this.getView().getCellSideLength() * 3);
 		this.getView().getSceneManager().getGameScene()
 				.attachChildOnTop(testKnight);
-		this.testFogOfWar(0);
+		this.showFogOfWar(this.model.getActivePlayer().getIndex());
 		// ---------------------------------------------------------------
 		// XXX SnowParticleSystem - Test
 		// ---------------------------------------------------------------
@@ -109,47 +111,57 @@ public class Controller implements IController {
 	}
 
 	@Override
-	public void testFogOfWar(int pPlayerIndex) {
-		List<int[]> testVisibleFogRectangles = new LinkedList<int[]>();
-		for (Unit testUnit : this.baseGameEntityMapper
-				.getAllUnits(pPlayerIndex)) {
-			UnitEntity testUnitEntity = this.baseGameEntityMapper
-					.getUnitEntity(testUnit);
-			int lColumn = (int) (testUnitEntity.getX() / this.view
+	public void showFogOfWar(int pPlayerIndex) {
+		List<int[]> lVisibleFogRectangles = new LinkedList<int[]>();
+		for (Unit lUnit : this.baseGameEntityMapper.getAllUnits(pPlayerIndex)) {
+			UnitEntity lUnitEntity = this.baseGameEntityMapper
+					.getUnitEntity(lUnit);
+			int lColumn = (int) (lUnitEntity.getX() / this.view
 					.getCellSideLength());
-			int lRow = (int) (testUnitEntity.getY() / this.view
+			int lRow = (int) (lUnitEntity.getY() / this.view
 					.getCellSideLength());
-			testVisibleFogRectangles.add(new int[] { lColumn - 2, lRow - 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn - 2, lRow });
-			testVisibleFogRectangles.add(new int[] { lColumn - 2, lRow + 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn - 1, lRow - 2 });
-			testVisibleFogRectangles.add(new int[] { lColumn - 1, lRow - 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn - 1, lRow });
-			testVisibleFogRectangles.add(new int[] { lColumn - 1, lRow + 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn - 1, lRow + 2 });
-			testVisibleFogRectangles.add(new int[] { lColumn, lRow - 2 });
-			testVisibleFogRectangles.add(new int[] { lColumn, lRow - 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn, lRow });
-			testVisibleFogRectangles.add(new int[] { lColumn, lRow + 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn, lRow + 2 });
-			testVisibleFogRectangles.add(new int[] { lColumn + 1, lRow - 2 });
-			testVisibleFogRectangles.add(new int[] { lColumn + 1, lRow - 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn + 1, lRow });
-			testVisibleFogRectangles.add(new int[] { lColumn + 1, lRow + 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn + 1, lRow + 2 });
-			testVisibleFogRectangles.add(new int[] { lColumn + 2, lRow - 1 });
-			testVisibleFogRectangles.add(new int[] { lColumn + 2, lRow });
-			testVisibleFogRectangles.add(new int[] { lColumn + 2, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 2, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 2, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn - 2, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow - 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow + 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow - 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow + 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow - 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow + 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 2, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 2, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn + 2, lRow + 1 });
 		}
-		this.view.getSceneManager().getGameScene()
-				.showFogOfWar(testVisibleFogRectangles);
+		List<float[]> lVisibleRectanglesAbsoluteCoordinates = this
+				.getAbsoluteCoordinates(lVisibleFogRectangles);
+		this.view
+				.getSceneManager()
+				.getGameScene()
+				.exploreCells(this.model.getActivePlayer().getIndex(),
+						lVisibleRectanglesAbsoluteCoordinates);
+		this.view
+				.getSceneManager()
+				.getGameScene()
+				.showFogOfWar(this.model.getActivePlayer().getIndex(),
+						lVisibleRectanglesAbsoluteCoordinates);
 	}
 
 	@Override
 	public boolean handleGameSceneTouch(final TouchEvent pTouchEvent) {
 		if (pTouchEvent.isActionDown()) {
-			this.view.getSoundManager().getSounds().get(SoundType.ATTACK)
-					.play();
+			// XXX ANNOYING
+			// this.view.getSoundManager().getSounds().get(SoundType.ATTACK)
+			// .play();
 			List<float[]> lAppearCoordinatesOnGameScene = new ArrayList<float[]>();
 			lAppearCoordinatesOnGameScene.add(this.getAbsoluteCoordinates(this
 					.getLogicalCoordinates(pTouchEvent.getX(),
@@ -167,7 +179,7 @@ public class Controller implements IController {
 	@Override
 	public boolean handleEditorSceneTouch(TouchEvent pTouchEvent) {
 		if (pTouchEvent.isActionDown()) {
-			EditorScene editorScene = this.view.getSceneManager()
+			IEditorScene editorScene = this.view.getSceneManager()
 					.getEditorScene();
 			EditorControl editorControl = this.model.getEditorControl();
 			String key = editorScene.getActualKey();
@@ -184,7 +196,7 @@ public class Controller implements IController {
 	@Override
 	public void startEditing() {
 		this.model.startEditing();
-		EditorScene editorScene = this.view.getSceneManager().getEditorScene();
+		IEditorScene editorScene = this.view.getSceneManager().getEditorScene();
 		EditorControl editorControl = this.model.getEditorControl();
 		editorScene.setColumnsAndRows(editorControl.getColumns(),
 				editorControl.getRows());
@@ -198,35 +210,55 @@ public class Controller implements IController {
 		this.view.getSceneManager().setActualSceneType(SceneType.MENU);
 	}
 
+	@Override
 	public float getAbsoluteCoordinate(int pColumnOrRow) {
 		return this.view.getCellSideLength() * pColumnOrRow;
 	}
 
+	@Override
 	public int getLogicalCoordinate(float pAbsoluteCoordinate) {
 		return (int) (pAbsoluteCoordinate / this.view.getCellSideLength());
 	}
 
-	public float[] getAbsoluteCoordinates(int[] pColumnAndRow) {
+	private float[] getAbsoluteCoordinates(int[] pColumnAndRow) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new float[] { lCellSideLength * pColumnAndRow[0],
 				lCellSideLength * pColumnAndRow[1] };
 	}
 
-	public int[] getLogicalCoordinates(float[] pAbsoluteCoordinates) {
+	private int[] getLogicalCoordinates(float[] pAbsoluteCoordinates) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new int[] { (int) (pAbsoluteCoordinates[0] / lCellSideLength),
 				(int) (pAbsoluteCoordinates[1] / lCellSideLength) };
 	}
 
-	public float[] getAbsoluteCoordinates(int pColumn, int pRow) {
+	private float[] getAbsoluteCoordinates(int pColumn, int pRow) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new float[] { lCellSideLength * pColumn, lCellSideLength * pRow };
 	}
 
-	public int[] getLogicalCoordinates(float pX, float pY) {
+	private int[] getLogicalCoordinates(float pX, float pY) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new int[] { (int) (pX / lCellSideLength),
 				(int) (pY / lCellSideLength) };
+	}
+
+	private List<int[]> getLogicalCoordinates(List<float[]> pAbsoluteCoordinates) {
+		List<int[]> lLogicalCoordinates = new ArrayList<int[]>();
+		for (float[] lAbsoluteCoordinatesSet : pAbsoluteCoordinates) {
+			lLogicalCoordinates.add(this
+					.getLogicalCoordinates(lAbsoluteCoordinatesSet));
+		}
+		return lLogicalCoordinates;
+	}
+
+	private List<float[]> getAbsoluteCoordinates(List<int[]> pLogicalCoordinates) {
+		List<float[]> lAbsoluteCoordinates = new ArrayList<float[]>();
+		for (int[] lLogicalCoordinatesSet : pLogicalCoordinates) {
+			lAbsoluteCoordinates.add(this
+					.getAbsoluteCoordinates(lLogicalCoordinatesSet));
+		}
+		return lAbsoluteCoordinates;
 	}
 
 	@Override
@@ -250,4 +282,41 @@ public class Controller implements IController {
 	public BaseGameEntityMapper getBaseGameEntityMapper() {
 		return this.baseGameEntityMapper;
 	}
+
+	@Override
+	public void moveUnit(UnitEntity pUnitEntity, float pX, float pY) {
+		int lColumn = this.getLogicalCoordinate(pX);
+		int lRow = this.getLogicalCoordinate(pY);
+		List<int[]> lMovedCells = this.model.moveUnit(
+				this.baseGameEntityMapper.getUnit(pUnitEntity), lColumn, lRow);
+		this.view.getSceneManager().getGameScene()
+				.move(pUnitEntity, this.getAbsoluteCoordinates(lMovedCells));
+	}
+
+	@Override
+	public void attack(UnitEntity pAttackingUnitEntity,
+			AGameBaseEntity pDefendingEntity) {
+		FightingEntity lDefendingEntity = pDefendingEntity instanceof BuildingEntity ? this.baseGameEntityMapper
+				.getBuilding((BuildingEntity) pDefendingEntity)
+				: this.baseGameEntityMapper
+						.getUnit((UnitEntity) pDefendingEntity);
+		int lDamageDoneToDefendingUnit = this.model.attack(
+				this.baseGameEntityMapper.getUnit(pAttackingUnitEntity),
+				lDefendingEntity);
+		this.view
+				.getSceneManager()
+				.getGameScene()
+				.attack(pAttackingUnitEntity,
+						pDefendingEntity,
+						lDamageDoneToDefendingUnit,
+						lDamageDoneToDefendingUnit >= lDefendingEntity
+								.getHealth());
+	}
+
+	@Override
+	public void changePlayer() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

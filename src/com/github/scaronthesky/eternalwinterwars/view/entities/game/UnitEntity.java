@@ -11,6 +11,7 @@ import org.andengine.util.color.Color;
 
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
+import com.github.scaronthesky.eternalwinterwars.controller.constants.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.multitexture.MultiTextureAnimatedSprite;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
 import com.github.scaronthesky.eternalwinterwars.view.util.AnimationExecutor;
@@ -44,7 +45,8 @@ public class UnitEntity extends AGameBaseEntity {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				// XXX TEST!!!
-				if (pSceneTouchEvent.isActionDown()) {
+				if (UnitEntity.this.isClickable()
+						&& pSceneTouchEvent.isActionDown()) {
 					// UnitEntity.this.getController().getView().getSceneManager()
 					// .getGameScene()
 					// .showAttackOrCancelDialogue(UnitEntity.this);
@@ -71,9 +73,17 @@ public class UnitEntity extends AGameBaseEntity {
 						lStartCoordinates.add(new float[] {
 								lController.getAbsoluteCoordinate(lColumn),
 								lController.getAbsoluteCoordinate(lRow - 1) });
-						UnitEntity.this.getController().getView()
-								.getSceneManager().getGameScene()
-								.mark(UnitEntity.this, lStartCoordinates);
+						UnitEntity.this
+								.getController()
+								.getView()
+								.getSceneManager()
+								.getGameScene()
+								.markCells(
+										UnitEntity.this,
+										lStartCoordinates,
+										Constants.PLAYER_COLORS[lController
+												.getBaseGameEntityMapper()
+												.getPlayerIndex(UnitEntity.this)]);
 					}
 					UnitEntity.this.gMarked = !UnitEntity.this.gMarked;
 				}

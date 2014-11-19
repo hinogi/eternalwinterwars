@@ -1,11 +1,15 @@
 package com.github.scaronthesky.eternalwinterwars.model;
 
+import java.util.List;
+
 import com.github.scaronthesky.eternalwinterwars.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.model.cellcontrol.CellControl;
 import com.github.scaronthesky.eternalwinterwars.model.editorcontrol.EditorControl;
+import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 import com.github.scaronthesky.eternalwinterwars.model.players.PlayerImpl;
+import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
 
 /**
  * @author Manu
@@ -37,8 +41,6 @@ public class Model implements IModel {
 
 	@Override
 	public void displayBoard() {
-		// Creates a CellControl, needs at least one stored BoardMap to work.
-		// Has to be done after creating the SharedPreferencesManager(!)
 		this.setCellControl(this.getCellControl());
 	}
 
@@ -106,4 +108,17 @@ public class Model implements IModel {
 	public Player[] getPlayers() {
 		return this.players;
 	}
+
+	@Override
+	public List<int[]> moveUnit(Unit pUnit, int pColumn, int pRow) {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public int attack(Unit pAttackingUnit, FightingEntity pDefendingEntity) {
+		// TODO
+		return 0;
+	}
+
 }

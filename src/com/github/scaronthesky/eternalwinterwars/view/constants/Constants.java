@@ -40,5 +40,5 @@ public abstract class Constants {
 	public static final float GAME_BASE_ENTITY_HEALTHBAR_HEIGHT_PERC = 0.1f;
 
 	public static final Color FOG_OF_WAR_COLOR = Color.BLACK;
-	public static final float FOG_OF_WAR_ALPHA = 0.4f;
+	public static final float FOG_OF_WAR_ALPHA_LIGHTENED = 0.4f;
 }

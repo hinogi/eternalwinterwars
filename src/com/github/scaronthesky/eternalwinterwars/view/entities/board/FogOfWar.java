@@ -43,7 +43,6 @@ public class FogOfWar extends Entity {
 				this.gController.getMainActivity()
 						.getVertexBufferObjectManager());
 		lFogRectangle.setColor(Constants.FOG_OF_WAR_COLOR);
-		lFogRectangle.setAlpha(Constants.FOG_OF_WAR_ALPHA);
 		return lFogRectangle;
 	}
 
@@ -71,6 +70,13 @@ public class FogOfWar extends Entity {
 		if (!lFogRectangle.isVisible()) {
 			lFogRectangle.setVisible(true);
 			this.gHiddenRectangles.remove(lFogRectangle);
+		}
+	}
+
+	public void lightenFog(int pColumn, int pRow) {
+		Rectangle lFogRectangle = this.gRectangles[pColumn][pRow];
+		if (lFogRectangle.isVisible()) {
+			lFogRectangle.setAlpha(Constants.FOG_OF_WAR_ALPHA_LIGHTENED);
 		}
 	}
 }
