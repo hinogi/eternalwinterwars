@@ -7,9 +7,8 @@ import com.github.scaronthesky.eternalwinterwars.model.cells.Cell;
 public class CellControl {
 
 	private ArrayList<ArrayList<Cell>> cells;
-	
+
 	private ArrayList<CellWithMovement> reachableCells = new ArrayList<CellWithMovement>();
-	
 
 	public CellControl(ArrayList<ArrayList<Cell>> cells) {
 		super();
@@ -40,13 +39,15 @@ public class CellControl {
 		}
 		ArrayList<CellWithMovement> reachableCells = new ArrayList<CellWithMovement>();
 		int remainingMovement = maximumMovement;
-		getReachableCellsInDirection(cellXPos, cellYPos,remainingMovement,Direction.NORTH);
+		getReachableCellsInDirection(cellXPos, cellYPos, remainingMovement,
+				Direction.NORTH);
 		// TODO: Get reachable cells in other directions
-		
+
 		return cells;
 	}
 
-	private void getReachableCellsInDirection(int cellXPos, int cellYPos, int remainingMovement, Direction direction) {
+	private void getReachableCellsInDirection(int cellXPos, int cellYPos,
+			int remainingMovement, Direction direction) {
 		// TODO: Add switch case for directions
 		int steps = 1;
 		while (remainingMovement > 0) {
@@ -86,6 +87,20 @@ public class CellControl {
 	public ArrayList<ArrayList<Cell>> getCells() {
 		// TODO: Implement
 		return cells;
+	}
+
+	/**
+	 * @return the column count
+	 */
+	public int getColumnCount() {
+		return cells.get(0).size();
+	}
+
+	/**
+	 * @return the row count
+	 */
+	public int getRowCount() {
+		return cells.size();
 	}
 
 	private class CellWithMovement {

@@ -2,8 +2,6 @@ package com.github.scaronthesky.eternalwinterwars.model.buildings;
 
 import java.util.UUID;
 
-import org.andengine.entity.sprite.Sprite;
-
 import com.github.scaronthesky.eternalwinterwars.model.buildings.producebehaviours.ProduceBehaviour;
 import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
@@ -12,8 +10,8 @@ public abstract class Building extends FightingEntity {
 
 	private ProduceBehaviour produceBehavior;
 	
-	public Building(UUID uuid, Player owner, Sprite sprite) {
-		super(uuid, sprite, owner);
+	public Building(UUID uuid, Player owner, String spriteKey) {
+		super(uuid, spriteKey, owner);
 	}
 	
 	/**

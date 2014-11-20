@@ -11,9 +11,10 @@ import org.andengine.util.color.Color;
 
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.view.AnimationExecutor;
+import com.github.scaronthesky.eternalwinterwars.controller.constants.Constants;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.multitexture.MultiTextureAnimatedSprite;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
+import com.github.scaronthesky.eternalwinterwars.view.util.AnimationExecutor;
 
 /**
  * @author Manuel Seiche
@@ -44,11 +45,12 @@ public class UnitEntity extends AGameBaseEntity {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				// XXX TEST!!!
-				if (pSceneTouchEvent.isActionDown()) {
-					if (UnitEntity.this.gMarked) {
-						UnitEntity.this.getController().getView()
-								.getSceneManager().getGameScene().removeMark();
-					} else {
+				if (UnitEntity.this.isClickable()
+						&& pSceneTouchEvent.isActionDown()) {
+					// UnitEntity.this.getController().getView().getSceneManager()
+					// .getGameScene()
+					// .showAttackOrCancelDialogue(UnitEntity.this);
+					if (!UnitEntity.this.gMarked) {
 						List<float[]> lStartCoordinates = new ArrayList<float[]>();
 						Controller lController = (Controller) UnitEntity.this
 								.getController();
@@ -56,6 +58,9 @@ public class UnitEntity extends AGameBaseEntity {
 								.getLogicalCoordinate(pSceneTouchEvent.getX());
 						int lRow = lController
 								.getLogicalCoordinate(pSceneTouchEvent.getY());
+						lStartCoordinates.add(new float[] {
+								lController.getAbsoluteCoordinate(lColumn),
+								lController.getAbsoluteCoordinate(lRow) });
 						lStartCoordinates.add(new float[] {
 								lController.getAbsoluteCoordinate(lColumn + 1),
 								lController.getAbsoluteCoordinate(lRow) });
@@ -68,9 +73,17 @@ public class UnitEntity extends AGameBaseEntity {
 						lStartCoordinates.add(new float[] {
 								lController.getAbsoluteCoordinate(lColumn),
 								lController.getAbsoluteCoordinate(lRow - 1) });
-						UnitEntity.this.getController().getView()
-								.getSceneManager().getGameScene()
-								.mark(UnitEntity.this, lStartCoordinates);
+						UnitEntity.this
+								.getController()
+								.getView()
+								.getSceneManager()
+								.getGameScene()
+								.markCells(
+										UnitEntity.this,
+										lStartCoordinates,
+										Constants.PLAYER_COLORS[lController
+												.getBaseGameEntityMapper()
+												.getPlayerIndex(UnitEntity.this)]);
 					}
 					UnitEntity.this.gMarked = !UnitEntity.this.gMarked;
 				}
@@ -78,10 +91,14 @@ public class UnitEntity extends AGameBaseEntity {
 						pTouchAreaLocalY);
 			}
 		};
-		pParentScene.registerTouchArea(this.gMultiTextureAnimatedSprite);
+		this.registerTouchArea();
 		this.attachChild(this.gMultiTextureAnimatedSprite);
-		AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
-				pAnimationProperties.get(pStartTileId));
+		// AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
+		// pAnimationProperties.get(pStartTileId));
+	}
+
+	public MultiTextureAnimatedSprite getMultiTextureAnimatedSprite() {
+		return this.gMultiTextureAnimatedSprite;
 	}
 
 	public AnimationProperties getAnimationProperties(String pAnimationKey) {
@@ -101,8 +118,13 @@ public class UnitEntity extends AGameBaseEntity {
 	}
 
 	public void animate(String pAnimationKey) {
-		AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
-				this.gAnimationProperties.get(pAnimationKey));
+		if (this.gAnimationProperties.containsKey(pAnimationKey)) {
+			AnimationExecutor.execute(this.gMultiTextureAnimatedSprite,
+					this.gAnimationProperties.get(pAnimationKey));
+		} else if (this.gMultiTextureAnimatedSprite.isAnimationRunning()) {
+			// IDLE missing
+			this.gMultiTextureAnimatedSprite.stopAnimation();
+		}
 	}
 
 	@Override
@@ -124,4 +146,8 @@ public class UnitEntity extends AGameBaseEntity {
 		this.gMarked = pMarked;
 	}
 
+	public void registerTouchArea() {
+		this.getParentScene().registerTouchArea(
+				this.gMultiTextureAnimatedSprite);
+	}
 }

@@ -2,8 +2,6 @@ package com.github.scaronthesky.eternalwinterwars.model.cells;
 
 import java.util.UUID;
 
-import org.andengine.entity.sprite.Sprite;
-
 import com.github.scaronthesky.eternalwinterwars.model.buildings.Building;
 import com.github.scaronthesky.eternalwinterwars.model.cells.defensebehaviours.CellDefenseBehaviour;
 import com.github.scaronthesky.eternalwinterwars.model.cells.movementbehaviours.CellMovementBehaviour;
@@ -13,7 +11,7 @@ import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
 public abstract class Cell {
 
 	private UUID uuid;
-	private Sprite sprite;
+	private String spriteKey;
 	private CellMovementBehaviour movementBehaviour;
 	private CellSightBehaviour sightBehaviour;
 	private CellDefenseBehaviour defenseBehaviour;
@@ -33,11 +31,12 @@ public abstract class Cell {
 	 * @param unit
 	 * @param building
 	 */
-	public Cell(final UUID uuid, final Unit unit, final Building building, final Sprite sprite) {
+	public Cell(final UUID uuid, final Unit unit, final Building building,
+			final String spriteKey) {
 		this.uuid = uuid;
 		this.unit = unit;
 		this.building = building;
-		this.sprite = sprite;
+		this.spriteKey = spriteKey;
 	}
 
 	/**
@@ -56,17 +55,18 @@ public abstract class Cell {
 	}
 
 	/**
-	 * @return the sprite
+	 * @return the spriteKey
 	 */
-	public Sprite getSprite() {
-		return sprite;
+	public String getSpriteKey() {
+		return spriteKey;
 	}
 
 	/**
-	 * @param sprite the sprite to set
+	 * @param spriteKey
+	 *            the spriteKey to set
 	 */
-	public void setSprite(Sprite sprite) {
-		this.sprite = sprite;
+	public void setSpriteKey(String spriteKey) {
+		this.spriteKey = spriteKey;
 	}
 
 	/**
@@ -182,7 +182,9 @@ public abstract class Cell {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -190,7 +192,5 @@ public abstract class Cell {
 		return "Cell [uuid=" + uuid + ", unit=" + unit + ", building="
 				+ building + "]";
 	}
-
-	
 
 }

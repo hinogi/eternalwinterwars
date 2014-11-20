@@ -143,6 +143,7 @@ public class Mark extends Entity implements ITouchArea {
 			float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		// XXX TEST
 		if (pSceneTouchEvent.isActionDown()) {
+			this.gSource.setClickable(false);
 			this.gController
 					.getView()
 					.getSceneManager()

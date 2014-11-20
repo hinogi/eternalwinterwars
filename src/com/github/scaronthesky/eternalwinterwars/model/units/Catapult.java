@@ -2,8 +2,6 @@ package com.github.scaronthesky.eternalwinterwars.model.units;
 
 import java.util.UUID;
 
-import org.andengine.entity.sprite.Sprite;
-
 import com.github.scaronthesky.eternalwinterwars.model.players.Player;
 import com.github.scaronthesky.eternalwinterwars.model.units.bluntarmamentbehaviour.BadBluntDefense;
 import com.github.scaronthesky.eternalwinterwars.model.units.bluntweaponbehaviours.CatapultThrower;
@@ -16,8 +14,8 @@ import com.github.scaronthesky.eternalwinterwars.model.units.sightbehaviours.Uni
 
 public class Catapult extends Unit {
 
-	public Catapult(UUID uuid, Sprite sprite, Player owner) {
-		super(uuid, sprite, owner);
+	public Catapult(UUID uuid, String spriteKey, Player owner) {
+		super(uuid, spriteKey, owner);
 		setHealthBehaviour(new NormalHealth());
 		setMovementBehaviour(new UnitSlowSpeed());
 		setPiercingWeaponBehaviour(new NoPiercingWeapon());

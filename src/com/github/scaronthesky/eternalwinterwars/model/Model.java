@@ -1,11 +1,15 @@
 package com.github.scaronthesky.eternalwinterwars.model;
 
+import java.util.List;
+
+import com.github.scaronthesky.eternalwinterwars.MainActivity;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.controller.IOService;
 import com.github.scaronthesky.eternalwinterwars.model.cellcontrol.CellControl;
 import com.github.scaronthesky.eternalwinterwars.model.editorcontrol.EditorControl;
-import com.github.scaronthesky.eternalwinterwars.view.BoardString;
-import com.github.scaronthesky.eternalwinterwars.view.MainActivity;
+import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
+import com.github.scaronthesky.eternalwinterwars.model.players.Player;
+import com.github.scaronthesky.eternalwinterwars.model.players.PlayerImpl;
+import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
 
 /**
  * @author Manu
@@ -19,6 +23,9 @@ public class Model implements IModel {
 	// -----------------------------------------------------
 	private CellControl cellControl;
 	private EditorControl editorControl;
+	private Player[] players = new Player[] { new PlayerImpl("Manuel", 100),
+			new PlayerImpl("Matthias", 100) };
+	private int activePlayerIndex;
 
 	/**
 	 * Creates an instance of {@link Model}
@@ -30,33 +37,15 @@ public class Model implements IModel {
 	 */
 	public Model(IController controller) {
 		this.setController(controller);
-		// Displays the GameScene - GUI 'setVisible(true)'. Has to be done after
-		// creating the SharedPreferencesManager(!)
-		this.displayBoard(getRandomMap());
 	}
 
-	public void displayBoard(BoardString boardMap) {
-		// Creates a CellControl, needs at least one stored BoardMap to work.
-		// Has to be done after creating the SharedPreferencesManager(!)
-		this.setCellControl(new CellControl(boardMap.getCells()));
-	}
-
-	/**
-	 * @return a random {@link BoardMap} from the {@link IOService}
-	 */
-	public BoardString getRandomMap() {
-		return controller
-				.getIOService()
-				.getMapStorage()
-				.values()
-				.toArray(
-						new BoardString[controller.getIOService()
-								.getMapStorage().values().size()])[(int) (Math
-				.random() * controller.getIOService().getMapStorage().size())];
+	@Override
+	public void displayBoard() {
+		this.setCellControl(this.getCellControl());
 	}
 
 	public IController getController() {
-		return controller;
+		return this.controller;
 	}
 
 	public void setController(IController controller) {
@@ -65,11 +54,11 @@ public class Model implements IModel {
 
 	@Override
 	public CellControl getCellControl() {
-		if (cellControl == null) {
-			cellControl = new CellControl(getController().getIOService()
-					.getMapStorage().get("Map#1").getCells());
+		if (this.cellControl == null) {
+			this.cellControl = this.getController().getIOService()
+					.randomCellControl();
 		}
-		return cellControl;
+		return this.cellControl;
 	}
 
 	/**
@@ -80,8 +69,9 @@ public class Model implements IModel {
 		this.cellControl = cellControl;
 	}
 
+	@Override
 	public EditorControl getEditorControl() {
-		return editorControl;
+		return this.editorControl;
 	}
 
 	public void setEditorControl(EditorControl editorControl) {
@@ -93,17 +83,42 @@ public class Model implements IModel {
 	// -----------------------------------------------------
 	@Override
 	public void startEditing() {
-		setEditorControl(new EditorControl(getController()));
+		this.setEditorControl(new EditorControl(this.getController()));
 	}
 
 	@Override
 	public void finishEditing() {
-		controller
-				.getIOService()
-				.getMapStorage()
-				.put("Map#"
-						+ controller.getIOService().getMapStorage().keySet()
-								.size() + 1, editorControl.getBoardString());
-		editorControl = null;
+		this.controller.getIOService().getCellControls()
+				.add(this.editorControl.getCellControl());
+		this.editorControl = null;
 	}
+
+	@Override
+	public Player getActivePlayer() {
+		return this.players[this.activePlayerIndex];
+	}
+
+	@Override
+	public void nextPlayer() {
+		this.activePlayerIndex = (this.activePlayerIndex == this.players.length - 1) ? 0
+				: this.activePlayerIndex + 1;
+	}
+
+	@Override
+	public Player[] getPlayers() {
+		return this.players;
+	}
+
+	@Override
+	public List<int[]> moveUnit(Unit pUnit, int pColumn, int pRow) {
+		// TODO
+		return null;
+	}
+
+	@Override
+	public int attack(Unit pAttackingUnit, FightingEntity pDefendingEntity) {
+		// TODO
+		return 0;
+	}
+
 }

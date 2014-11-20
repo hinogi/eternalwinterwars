@@ -1,35 +1,44 @@
 package com.github.scaronthesky.eternalwinterwars.controller;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 import org.andengine.input.touch.TouchEvent;
-import org.andengine.util.color.Color;
 
+import com.github.scaronthesky.eternalwinterwars.MainActivity;
+import com.github.scaronthesky.eternalwinterwars.controller.mapping.BaseGameEntityMapper;
+import com.github.scaronthesky.eternalwinterwars.controller.util.CellBuilder;
+import com.github.scaronthesky.eternalwinterwars.model.IModel;
 import com.github.scaronthesky.eternalwinterwars.model.Model;
 import com.github.scaronthesky.eternalwinterwars.model.editorcontrol.EditorControl;
-import com.github.scaronthesky.eternalwinterwars.view.Constants;
-import com.github.scaronthesky.eternalwinterwars.view.GameControl;
-import com.github.scaronthesky.eternalwinterwars.view.MainActivity;
+import com.github.scaronthesky.eternalwinterwars.model.entity.FightingEntity;
+import com.github.scaronthesky.eternalwinterwars.model.units.Archer;
+import com.github.scaronthesky.eternalwinterwars.model.units.Knight;
+import com.github.scaronthesky.eternalwinterwars.model.units.Unit;
+import com.github.scaronthesky.eternalwinterwars.view.IView;
 import com.github.scaronthesky.eternalwinterwars.view.View;
+import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.BuildingEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager.SceneType;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager.MusicType;
-import com.github.scaronthesky.eternalwinterwars.view.managers.SoundManager.SoundType;
-import com.github.scaronthesky.eternalwinterwars.view.managers.effects.animationeffects.AnimationProperties;
 import com.github.scaronthesky.eternalwinterwars.view.particles.ParticleSystemBuilder;
-import com.github.scaronthesky.eternalwinterwars.view.scenes.editorscene.EditorScene;
+import com.github.scaronthesky.eternalwinterwars.view.scenes.editorscene.IEditorScene;
+import com.github.scaronthesky.eternalwinterwars.view.util.GameControl;
 
 public class Controller implements IController {
 	private MainActivity mainActivity;
 	private IOService ioService;
-	private Model model;
-	private View view;
+	private BaseGameEntityMapper baseGameEntityMapper;
+	private IModel model;
+	private IView view;
 
 	public Controller(MainActivity mainActivity) {
 		this.mainActivity = mainActivity;
 		this.ioService = new IOService(this);
+		this.baseGameEntityMapper = new BaseGameEntityMapper(this);
 		this.model = new Model(this);
 		this.view = new View(this);
 	}
@@ -45,68 +54,51 @@ public class Controller implements IController {
 	}
 
 	@Override
-	public Model getModel() {
+	public IModel getModel() {
 		return this.model;
 	}
 
 	@Override
-	public View getView() {
+	public IView getView() {
 		return this.view;
 	}
+
+	// XXX TEST
+	public static BuildingEntity testBuilding;
 
 	@Override
 	public void startTest() {
 		new GameControl(this, 2);
 		this.getView().getSoundManager().setActualMusicType(MusicType.GAME);
 		this.getView().getSoundManager().getActualMusic().play();
-		// ---------------------------------------------------------------
-		// XXX BuildingEntity - Test
-		// ---------------------------------------------------------------
-		BuildingEntity lBuildingEntity = new BuildingEntity(this, this
-				.getView().getSceneManager().getGameScene(), this.getView()
-				.getCellSideLength(),
-				this.getView().getCellSideLength() * 0.2f, 100, 100, Color.RED,
-				Color.WHITE, true, this.getView().getResourceManager()
-						.getTextureRegions().get("4"), this.getView()
-						.getCellSideLength());
-		lBuildingEntity.setX(this.view.getCellSideLength() * 10);
-		lBuildingEntity.setY(this.view.getCellSideLength() * 5);
+		Unit marksmanOne = new Archer(UUID.randomUUID(), "Marksmen_v1.png",
+				this.model.getPlayers()[0]);
+		this.baseGameEntityMapper.mapUnit(marksmanOne);
+		UnitEntity testMarksman = this.baseGameEntityMapper
+				.getUnitEntity(marksmanOne);
+		testMarksman.setX(this.getView().getCellSideLength() * 10);
+		testMarksman.setY(this.getView().getCellSideLength() * 5);
 		this.getView().getSceneManager().getGameScene()
-				.attachChild(lBuildingEntity);
-		// ---------------------------------------------------------------
-		// XXX UnitEntity - Test
-		// ---------------------------------------------------------------
-		Map<String, AnimationProperties> lAnimationProperties = new HashMap<String, AnimationProperties>();
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_UP,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 0, 2, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_LEFT,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 3, 5, true, true, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_RIGHT,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 3, 5, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_MOVE_DOWN,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 6, 8, true, false, false));
-		lAnimationProperties.put(Constants.ANIMATION_KEY_IDLE,
-				new AnimationProperties(this.view.getResourceManager()
-						.getTiledTextureRegionTestUnitMove(), new long[] { 150,
-						150, 150 }, 6, 8, true, false, false));
-		UnitEntity lUnitEntity = new UnitEntity(this, this.view
-				.getSceneManager().getGameScene(), this.getView()
-				.getCellSideLength(),
-				this.getView().getCellSideLength() * 0.2f, 100, 90,
-				Color.GREEN, Color.WHITE, true, lAnimationProperties,
-				"move_left", this.view.getCellSideLength());
-		lUnitEntity.setX(this.view.getCellSideLength() * 12);
-		lUnitEntity.setY(this.view.getCellSideLength() * 7);
+				.attachChildOnTop(testMarksman);
+		Unit marksmanTwo = new Archer(UUID.randomUUID(), "Marksmen_v1.png",
+				this.model.getPlayers()[0]);
+		this.baseGameEntityMapper.mapUnit(marksmanTwo);
+		UnitEntity testMarksmanTwo = this.baseGameEntityMapper
+				.getUnitEntity(marksmanTwo);
+		testMarksmanTwo.setX(this.getView().getCellSideLength() * 5);
+		testMarksmanTwo.setY(this.getView().getCellSideLength() * 5);
 		this.getView().getSceneManager().getGameScene()
-				.attachChild(lUnitEntity);
+				.attachChildOnTop(testMarksmanTwo);
+		Unit knight = new Knight(UUID.randomUUID(), "Knight_v1.png",
+				this.model.getPlayers()[1]);
+		this.baseGameEntityMapper.mapUnit(knight);
+		UnitEntity testKnight = this.baseGameEntityMapper.getUnitEntity(knight);
+		testKnight.setClickable(false);
+		testKnight.setX(this.getView().getCellSideLength() * 10);
+		testKnight.setY(this.getView().getCellSideLength() * 3);
+		this.getView().getSceneManager().getGameScene()
+				.attachChildOnTop(testKnight);
+		this.showFogOfWar(this.model.getActivePlayer().getIndex());
 		// ---------------------------------------------------------------
 		// XXX SnowParticleSystem - Test
 		// ---------------------------------------------------------------
@@ -119,12 +111,66 @@ public class Controller implements IController {
 	}
 
 	@Override
+	public void showFogOfWar(int pPlayerIndex) {
+		List<int[]> lVisibleFogRectangles = new LinkedList<int[]>();
+		for (Unit lUnit : this.baseGameEntityMapper.getAllUnits(pPlayerIndex)) {
+			UnitEntity lUnitEntity = this.baseGameEntityMapper
+					.getUnitEntity(lUnit);
+			int lColumn = (int) (lUnitEntity.getX() / this.view
+					.getCellSideLength());
+			int lRow = (int) (lUnitEntity.getY() / this.view
+					.getCellSideLength());
+			lVisibleFogRectangles.add(new int[] { lColumn - 2, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 2, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn - 2, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow - 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn - 1, lRow + 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow - 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn, lRow + 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow - 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow + 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 1, lRow + 2 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 2, lRow - 1 });
+			lVisibleFogRectangles.add(new int[] { lColumn + 2, lRow });
+			lVisibleFogRectangles.add(new int[] { lColumn + 2, lRow + 1 });
+		}
+		List<float[]> lVisibleRectanglesAbsoluteCoordinates = this
+				.getAbsoluteCoordinates(lVisibleFogRectangles);
+		this.view
+				.getSceneManager()
+				.getGameScene()
+				.exploreCells(this.model.getActivePlayer().getIndex(),
+						lVisibleRectanglesAbsoluteCoordinates);
+		this.view
+				.getSceneManager()
+				.getGameScene()
+				.showFogOfWar(this.model.getActivePlayer().getIndex(),
+						lVisibleRectanglesAbsoluteCoordinates);
+	}
+
+	@Override
 	public boolean handleGameSceneTouch(final TouchEvent pTouchEvent) {
 		if (pTouchEvent.isActionDown()) {
-			this.view.getSoundManager().getSounds().get(SoundType.ATTACK)
-					.play();
-			this.mainActivity.getSmoothCamera().setCenter(pTouchEvent.getX(),
-					pTouchEvent.getY());
+			// XXX ANNOYING
+			// this.view.getSoundManager().getSounds().get(SoundType.ATTACK)
+			// .play();
+			List<float[]> lAppearCoordinatesOnGameScene = new ArrayList<float[]>();
+			lAppearCoordinatesOnGameScene.add(this.getAbsoluteCoordinates(this
+					.getLogicalCoordinates(pTouchEvent.getX(),
+							pTouchEvent.getY())));
+			this.view
+					.getSceneManager()
+					.getGameScene()
+					.addIncome(lAppearCoordinatesOnGameScene,
+							(int) (Math.random() * 100));
 			return true;
 		}
 		return false;
@@ -133,7 +179,7 @@ public class Controller implements IController {
 	@Override
 	public boolean handleEditorSceneTouch(TouchEvent pTouchEvent) {
 		if (pTouchEvent.isActionDown()) {
-			EditorScene editorScene = this.view.getSceneManager()
+			IEditorScene editorScene = this.view.getSceneManager()
 					.getEditorScene();
 			EditorControl editorControl = this.model.getEditorControl();
 			String key = editorScene.getActualKey();
@@ -141,7 +187,7 @@ public class Controller implements IController {
 					.getSpriteSideLength());
 			int row = (int) (pTouchEvent.getY() / editorScene
 					.getSpriteSideLength());
-			editorControl.setKey(key, column, row);
+			editorControl.setCell(CellBuilder.buildCell(key), column, row);
 			editorScene.drawSprite(key, column, row);
 		}
 		return false;
@@ -150,7 +196,7 @@ public class Controller implements IController {
 	@Override
 	public void startEditing() {
 		this.model.startEditing();
-		EditorScene editorScene = this.view.getSceneManager().getEditorScene();
+		IEditorScene editorScene = this.view.getSceneManager().getEditorScene();
 		EditorControl editorControl = this.model.getEditorControl();
 		editorScene.setColumnsAndRows(editorControl.getColumns(),
 				editorControl.getRows());
@@ -164,34 +210,113 @@ public class Controller implements IController {
 		this.view.getSceneManager().setActualSceneType(SceneType.MENU);
 	}
 
+	@Override
 	public float getAbsoluteCoordinate(int pColumnOrRow) {
 		return this.view.getCellSideLength() * pColumnOrRow;
 	}
 
+	@Override
 	public int getLogicalCoordinate(float pAbsoluteCoordinate) {
 		return (int) (pAbsoluteCoordinate / this.view.getCellSideLength());
 	}
 
-	public float[] getAbsoluteCoordinates(int[] pColumnAndRow) {
+	private float[] getAbsoluteCoordinates(int[] pColumnAndRow) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new float[] { lCellSideLength * pColumnAndRow[0],
 				lCellSideLength * pColumnAndRow[1] };
 	}
 
-	public int[] getLogicalCoordinates(float[] pAbsoluteCoordinates) {
+	private int[] getLogicalCoordinates(float[] pAbsoluteCoordinates) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new int[] { (int) (pAbsoluteCoordinates[0] / lCellSideLength),
 				(int) (pAbsoluteCoordinates[1] / lCellSideLength) };
 	}
 
-	public float[] getAbsoluteCoordinates(int pColumn, int pRow) {
+	private float[] getAbsoluteCoordinates(int pColumn, int pRow) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new float[] { lCellSideLength * pColumn, lCellSideLength * pRow };
 	}
 
-	public int[] getLogicalCoordinates(float pX, float pY) {
+	private int[] getLogicalCoordinates(float pX, float pY) {
 		float lCellSideLength = this.view.getCellSideLength();
 		return new int[] { (int) (pX / lCellSideLength),
 				(int) (pY / lCellSideLength) };
 	}
+
+	private List<int[]> getLogicalCoordinates(List<float[]> pAbsoluteCoordinates) {
+		List<int[]> lLogicalCoordinates = new ArrayList<int[]>();
+		for (float[] lAbsoluteCoordinatesSet : pAbsoluteCoordinates) {
+			lLogicalCoordinates.add(this
+					.getLogicalCoordinates(lAbsoluteCoordinatesSet));
+		}
+		return lLogicalCoordinates;
+	}
+
+	private List<float[]> getAbsoluteCoordinates(List<int[]> pLogicalCoordinates) {
+		List<float[]> lAbsoluteCoordinates = new ArrayList<float[]>();
+		for (int[] lLogicalCoordinatesSet : pLogicalCoordinates) {
+			lAbsoluteCoordinates.add(this
+					.getAbsoluteCoordinates(lLogicalCoordinatesSet));
+		}
+		return lAbsoluteCoordinates;
+	}
+
+	@Override
+	public String toString() {
+		return "Model=" + this.model + "/View=" + this.view;
+	}
+
+	@Override
+	public void handleAttackButtonClicked(UnitEntity pUnitEntity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void handleCancelButtonClicked(UnitEntity pUnitEntity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public BaseGameEntityMapper getBaseGameEntityMapper() {
+		return this.baseGameEntityMapper;
+	}
+
+	@Override
+	public void moveUnit(UnitEntity pUnitEntity, float pX, float pY) {
+		int lColumn = this.getLogicalCoordinate(pX);
+		int lRow = this.getLogicalCoordinate(pY);
+		List<int[]> lMovedCells = this.model.moveUnit(
+				this.baseGameEntityMapper.getUnit(pUnitEntity), lColumn, lRow);
+		this.view.getSceneManager().getGameScene()
+				.move(pUnitEntity, this.getAbsoluteCoordinates(lMovedCells));
+	}
+
+	@Override
+	public void attack(UnitEntity pAttackingUnitEntity,
+			AGameBaseEntity pDefendingEntity) {
+		FightingEntity lDefendingEntity = pDefendingEntity instanceof BuildingEntity ? this.baseGameEntityMapper
+				.getBuilding((BuildingEntity) pDefendingEntity)
+				: this.baseGameEntityMapper
+						.getUnit((UnitEntity) pDefendingEntity);
+		int lDamageDoneToDefendingUnit = this.model.attack(
+				this.baseGameEntityMapper.getUnit(pAttackingUnitEntity),
+				lDefendingEntity);
+		this.view
+				.getSceneManager()
+				.getGameScene()
+				.attack(pAttackingUnitEntity,
+						pDefendingEntity,
+						lDamageDoneToDefendingUnit,
+						lDamageDoneToDefendingUnit >= lDefendingEntity
+								.getHealth());
+	}
+
+	@Override
+	public void changePlayer() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

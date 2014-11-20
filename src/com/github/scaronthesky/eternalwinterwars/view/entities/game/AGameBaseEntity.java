@@ -18,6 +18,7 @@ public abstract class AGameBaseEntity extends Entity implements
 	public IController gController;
 	private final Scene gParentScene;
 	private final HealthBar gHealthBar;
+	private boolean gClickable = true;
 
 	public AGameBaseEntity(IController pController, Scene pParentScene,
 			float pHealthBarWidth, float pHealthBarHeight, int pMaxHealth,
@@ -39,6 +40,14 @@ public abstract class AGameBaseEntity extends Entity implements
 		} else {
 			this.gHealthBar.show();
 		}
+	}
+
+	public boolean isClickable() {
+		return this.gClickable;
+	}
+
+	public void setClickable(boolean pClickable) {
+		this.gClickable = pClickable;
 	}
 
 	public abstract void sufferFromAttack();

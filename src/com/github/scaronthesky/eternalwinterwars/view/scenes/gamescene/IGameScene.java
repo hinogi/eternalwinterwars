@@ -2,12 +2,16 @@ package com.github.scaronthesky.eternalwinterwars.view.scenes.gamescene;
 
 import java.util.List;
 
+import org.andengine.entity.IEntity;
+import org.andengine.entity.scene.Scene;
+import org.andengine.util.color.Color;
+
+import com.github.scaronthesky.eternalwinterwars.view.entities.board.Board;
 import com.github.scaronthesky.eternalwinterwars.view.entities.board.Mark;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.BuildingEntity;
 import com.github.scaronthesky.eternalwinterwars.view.entities.game.UnitEntity;
 import com.github.scaronthesky.eternalwinterwars.view.hud.gamehud.CoinEntity;
-
 
 /**
  * @author Manuel Seiche
@@ -28,10 +32,20 @@ public interface IGameScene {
 	 * 
 	 * @param pSource
 	 *            {@link UnitEntity} which is clicked
-	 * @param pStartCoordinates
+	 * @param pCellsToMarkCoordinates
 	 *            cells to mark (pX/pY left upper corner)
+	 * @param pMarkColor
+	 *            the {@link Mark}'s color
 	 */
-	public void mark(UnitEntity pSource, List<float[]> pStartCoordinates);
+	public void markCells(UnitEntity pSource,
+			List<float[]> pCellsToMarkCoordinates, Color pMarkColor);
+
+	public void showFogOfWar(int pPlayerIndex,
+			List<float[]> pVisibleRectanglesCoordinates);
+
+	public void exploreCell(int pPlayerIndex, float pX, float pY);
+
+	public void hideFogOfWar();
 
 	/**
 	 * Removes the {@link Mark}
@@ -95,4 +109,31 @@ public interface IGameScene {
 	 * f.e. shows a finishing animation
 	 */
 	public void finish();
+
+	/**
+	 * Shows a dialogue, which allows the selection of attack or cancel after
+	 * unit-movement
+	 * 
+	 * @param pSourceUnitEntity
+	 *            {@link UnitEntity} - Source
+	 */
+	public void showAttackOrCancelDialogue(UnitEntity pSourceUnitEntity);
+
+	public boolean isLocked();
+
+	public void attachChildOnTop(IEntity pEntity);
+
+	public void attachChildOnMidLayer(IEntity pEntity);
+
+	public void setBoard(Board pBoard);
+
+	public Board getBoard();
+
+	/**
+	 * @return Scene-Instance of implementing class
+	 */
+	public Scene getInstance();
+
+	public void exploreCells(int pPlayerIndex,
+			List<float[]> pVisibleRectanglesAbsoluteCoordinates);
 }

@@ -7,8 +7,8 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.modifier.IModifier;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.view.AnimationExecutor;
 import com.github.scaronthesky.eternalwinterwars.view.managers.effects.AEffect;
+import com.github.scaronthesky.eternalwinterwars.view.util.AnimationExecutor;
 /**
  * @author Manuel Seiche
  * @since 20.10.2014

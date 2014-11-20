@@ -3,7 +3,6 @@ package com.github.scaronthesky.eternalwinterwars.view.managers;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.texture.TextureOptions;
@@ -15,7 +14,6 @@ import org.andengine.util.color.Color;
 
 import android.graphics.Typeface;
 
-import com.github.scaronthesky.eternalwinterwars.R;
 import com.github.scaronthesky.eternalwinterwars.controller.Controller;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 
@@ -28,8 +26,8 @@ public class ResourceManager extends AManager {
 	// -----------------------------------------------------
 	// Image-Resources
 	// -----------------------------------------------------
-	private Map<String, ITextureRegion> gTextureRegions;
-	private Map<String, String> gKeyMap;
+	private Map<String, ITextureRegion> gCellTextureRegions;
+	private Map<String, ITiledTextureRegion> gGameBaseEntityTiledTextureRegions;
 	private ITextureRegion gTextureRegionSplashBackground;
 	private ITextureRegion gTextureRegionMenuBackground;
 	private ITextureRegion gTextureRegionButtonSettings;
@@ -37,8 +35,17 @@ public class ResourceManager extends AManager {
 	private ITextureRegion gTextureRegionCoinEntity;
 	private ITextureRegion gTextureRegionButtonSlideBar;
 	private ITextureRegion gTextureRegionParticleSnow;
+	private ITextureRegion gTextureRegionControlBase;
+	private ITextureRegion gTextureRegionControlKnob;
+	private ITextureRegion gTextureRegionAttack;
+	private ITextureRegion gTextureRegionCancel;
+	private ITextureRegion gTextureRegionArrow;
+	private ITextureRegion gTextureRegionStone;
 	private ITiledTextureRegion gTiledTextureRegionButton;
-	private ITiledTextureRegion gTiledTextureRegionTestUnitMove;
+	private ITiledTextureRegion gTiledTextureRegionKnight;
+	private ITiledTextureRegion gTiledTextureRegionMarksman;
+	private ITiledTextureRegion gTiledTextureRegionArtillery;
+	private ITiledTextureRegion gTiledTextureRegionCavallery;
 	private ITiledTextureRegion gTiledTextureRegionBlood;
 
 	// -----------------------------------------------------
@@ -66,29 +73,57 @@ public class ResourceManager extends AManager {
 
 	@Override
 	public void load() {
-		this.gKeyMap = this.loadKeysFromProperties();
-		this.gTextureRegions = new HashMap<String, ITextureRegion>();
+		this.gCellTextureRegions = new HashMap<String, ITextureRegion>();
+		this.gGameBaseEntityTiledTextureRegions = new HashMap<String, ITiledTextureRegion>();
 		this.addImageResourcesIterative(1920, 1080, "gfx/backgrounds");
 		this.addImageResourcesIterative(64, 64, "gfx/buildings");
 		this.addImageResourcesIterative(64, 64, "gfx/mountains");
 		this.addImageResourcesIterative(64, 64, "gfx/rivers");
+		this.addImageResourcesIterative(64, 64, "gfx/trees");
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		this.gTextureRegionArrow = this.loadImageResource(64, 64,
+				"effects/Arrow_v1.png");
+		this.gTextureRegionStone = this.loadImageResource(64, 64,
+				"effects/Stone_v1.png");
 		this.gTextureRegionMenuBackground = this.loadImageResource(1920, 1080,
 				"backgrounds/bg_v3.png");
 		this.gTextureRegionButtonSettings = this.loadImageResource(80, 80,
 				"settings.png");
 		this.gTextureRegionButtonMenu = this.loadImageResource(120, 80,
 				"menu.png");
-		this.gTextureRegionCoinEntity = this.loadImageResource(80, 80,
-				"settings.png");
-		this.gTextureRegionButtonSlideBar = this.loadImageResource(80,80,
-				"settings.png");
-		this.gTextureRegionParticleSnow = this.loadImageResource(80, 80,
-				"settings.png");
-		this.gTiledTextureRegionButton = this.loadTiledImageResource(371, 600,
-				"button.png", 1, 3);
-		this.gTiledTextureRegionTestUnitMove = this.loadTiledImageResource(256,
-				384, "units/knights/Knight_v1.png", 4, 6);
+		this.gTextureRegionCoinEntity = this.loadImageResource(100, 100,
+				"coin.png");
+		this.gTextureRegionButtonSlideBar = this.loadImageResource(64, 64,
+				"slidebar_icon.png");
+		this.gTextureRegionControlBase = this.loadImageResource(128, 128,
+				"onscreen_control_base.png");
+		this.gTextureRegionControlKnob = this.loadImageResource(64, 64,
+				"onscreen_control_knob.png");
+		this.gTextureRegionParticleSnow = this.loadImageResource(32, 32,
+				"snowflake.png");
+		this.gTextureRegionAttack = this
+				.loadImageResource(64, 64, "attack.png");
+		this.gTextureRegionCancel = this
+				.loadImageResource(64, 64, "cancel.png");
+		this.gTiledTextureRegionButton = this.loadTiledImageResource(370, 600,
+				"Menu/button_tile.png", 1, 3);
+		this.addTiledImageResource(256, 384, 4, 6, "Knight_v1.png",
+				"units/knights");
+		this.addTiledImageResource(256, 384, 4, 6, "Marksmen_v1.png",
+				"units/marksmen");
+		this.addTiledImageResource(256, 384, 4, 6, "Artillery_v1.png",
+				"units/artillery");
+		this.addTiledImageResource(256, 384, 4, 6, "Cavallery_v1.png",
+				"units/cavallery");
+		// XXX TODO
+		this.gTiledTextureRegionKnight = this.loadTiledImageResource(256, 384,
+				"units/knights/Knight_v1.png", 4, 6);
+		this.gTiledTextureRegionMarksman = this.loadTiledImageResource(256,
+				384, "units/marksmen/Marksmen_v1.png", 4, 6);
+		this.gTiledTextureRegionArtillery = this.loadTiledImageResource(256,
+				384, "units/artillery/Artillery_v1.png", 4, 6);
+		this.gTiledTextureRegionCavallery = this.loadTiledImageResource(256,
+				384, "units/cavallery/Cavallery_v1.png", 4, 6);
 		this.gTiledTextureRegionBlood = this.loadTiledImageResource(384, 64,
 				"effects/Blood_v2.png", 6, 1);
 		this.gFontButton = this.loadFont((int) (512 * this.getController()
@@ -111,20 +146,19 @@ public class ResourceManager extends AManager {
 						.getSmoothCamera().getHeight() / 20, Color.RED);
 	}
 
-	private Map<String, String> loadKeysFromProperties() {
-		this.gKeyMap = new HashMap<String, String>();
-		Properties lProperties = new Properties();
-		try {
-			lProperties.load(this.getController().getMainActivity()
-					.getResources().openRawResource(R.raw.image));
-			for (Object lObject : lProperties.keySet()) {
-				String lKey = (String) lObject;
-				this.gKeyMap.put(lKey, (String) lProperties.get(lKey));
-			}
-		} catch (IOException lIOException) {
-			lIOException.printStackTrace();
-		}
-		return this.gKeyMap;
+	private void addTiledImageResource(int pAtlasWidth, int pAtlasHeight,
+			int pColumns, int pRows, String pTextureName, String pDirectoryName) {
+		BitmapTextureAtlas lTextureAtlas = new BitmapTextureAtlas(this
+				.getController().getMainActivity().getTextureManager(),
+				pAtlasWidth, pAtlasHeight,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		ITiledTextureRegion pTiledTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(lTextureAtlas, this.getController()
+						.getMainActivity().getAssets(), pDirectoryName + "/"
+						+ pTextureName, 0, 0, pColumns, pRows);
+		lTextureAtlas.load();
+		this.gGameBaseEntityTiledTextureRegions.put(pTextureName,
+				pTiledTextureRegion);
 	}
 
 	/**
@@ -166,42 +200,10 @@ public class ResourceManager extends AManager {
 	 *            target asset path and map key
 	 */
 	private void addImageResource(int pAtlasWidth, int pAtlasHeight,
-			String pTextureName) {
-		this.gTextureRegions
-				.put(this.getKeyFromTextureName(pTextureName), this
-						.loadImageResource(pAtlasWidth, pAtlasHeight,
-								pTextureName));
-	}
-
-	/**
-	 * Loads and adds an ITextureRegion into the textureRegions - Map
-	 * 
-	 * @param pAtlasWidth
-	 *            the image's width
-	 * @param pAtlasHeight
-	 *            the image's height
-	 * @param pTextureName
-	 *            target asset path and map key
-	 */
-	private void addImageResource(int pAtlasWidth, int pAtlasHeight,
 			String pTextureName, String pDirectoryName) {
-		this.gTextureRegions.put(this.getKeyFromTextureName(pTextureName), this
-				.loadImageResource(pAtlasWidth, pAtlasHeight, pDirectoryName
-						+ "/" + pTextureName));
-	}
-
-	/**
-	 * @param pTextureName
-	 *            the image's name
-	 * @return the specific image key read from image.properties
-	 */
-	private String getKeyFromTextureName(String pTextureName) {
-		for (String lKey : this.gKeyMap.keySet()) {
-			if (this.gKeyMap.get(lKey).equals(pTextureName)) {
-				return lKey;
-			}
-		}
-		return null;
+		this.gCellTextureRegions
+				.put(pTextureName, this.loadImageResource(pAtlasWidth,
+						pAtlasHeight, pDirectoryName + "/" + pTextureName));
 	}
 
 	/**
@@ -290,8 +292,20 @@ public class ResourceManager extends AManager {
 		return this.gTiledTextureRegionButton;
 	}
 
-	public ITiledTextureRegion getTiledTextureRegionTestUnitMove() {
-		return this.gTiledTextureRegionTestUnitMove;
+	public ITiledTextureRegion getTiledTextureRegionKnight() {
+		return this.gTiledTextureRegionKnight;
+	}
+
+	public ITiledTextureRegion getTiledTextureRegionMarksman() {
+		return this.gTiledTextureRegionMarksman;
+	}
+
+	public ITiledTextureRegion getTiledTextureRegionArtillery() {
+		return this.gTiledTextureRegionArtillery;
+	}
+
+	public ITiledTextureRegion getTiledTextureRegionCavallery() {
+		return this.gTiledTextureRegionCavallery;
 	}
 
 	public Font getFontButton() {
@@ -306,8 +320,8 @@ public class ResourceManager extends AManager {
 		return this.gFontDamage;
 	}
 
-	public Map<String, ITextureRegion> getTextureRegions() {
-		return this.gTextureRegions;
+	public Map<String, ITextureRegion> getCellTextureRegions() {
+		return this.gCellTextureRegions;
 	}
 
 	public ITextureRegion getTextureRegionButtonSettings() {
@@ -334,11 +348,46 @@ public class ResourceManager extends AManager {
 		return this.gTextureRegionButtonSlideBar;
 	}
 
+	public ITextureRegion getTextureRegionAttack() {
+		return this.gTextureRegionAttack;
+	}
+
+	public ITextureRegion getTextureRegionCancel() {
+		return this.gTextureRegionCancel;
+	}
+
 	public ITextureRegion getTextureRegionParticleSnow() {
 		return this.gTextureRegionParticleSnow;
 	}
 
+	public ITextureRegion getTextureRegionControlBase() {
+		return this.gTextureRegionControlBase;
+	}
+
+	public ITextureRegion getTextureRegionControlKnob() {
+		return this.gTextureRegionControlKnob;
+	}
+
 	public ITiledTextureRegion getTiledTextureRegionBlood() {
 		return this.gTiledTextureRegionBlood;
+	}
+
+	public ITextureRegion getTextureRegionArrow() {
+		return this.gTextureRegionArrow;
+	}
+
+	public ITextureRegion getTextureRegionStone() {
+		return this.gTextureRegionStone;
+	}
+
+	public ITextureRegion getTextureRegionCastle(int pPlayerIndex) {
+		switch (pPlayerIndex) {
+		case 0:
+			return this.gCellTextureRegions.get("castle_v6.png");
+		case 1:
+			return this.gCellTextureRegions.get("castle_v5.png");
+		default:
+			return null;
+		}
 	}
 }

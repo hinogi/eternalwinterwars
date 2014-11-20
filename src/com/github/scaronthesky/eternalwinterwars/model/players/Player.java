@@ -10,4 +10,6 @@ public interface Player {
 
 	public int getBudget();
 
+	public int getIndex();
+
 }

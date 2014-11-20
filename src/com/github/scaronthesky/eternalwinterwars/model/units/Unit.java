@@ -17,8 +17,8 @@ public abstract class Unit extends FightingEntity {
 	/**
 	 * A unit. Use UnitBuilder class to create new units.
 	 */
-	public Unit(UUID uuid, Sprite sprite, Player owner) {
-		super(uuid, sprite, owner);
+	public Unit(UUID uuid, String spriteKey, Player owner) {
+		super(uuid, spriteKey, owner);
 	}
 
 	/**

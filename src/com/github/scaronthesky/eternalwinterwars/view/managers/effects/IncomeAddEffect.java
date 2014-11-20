@@ -32,11 +32,12 @@ public class IncomeAddEffect extends AEffect {
 					@Override
 					public void onModifierStarted(IModifier<IEntity> pModifier,
 							IEntity pItem) {
-						iSprites = new EffectServer(pController, pX, pY,
+						this.iSprites = new EffectServer(pController, pX, pY,
 								pParentScene).createSprites(pAppearCoordinates,
 								pWidth, pHeight, pTextureRegion,
 								pVertexBufferObjectManager);
-						for (Sprite iSprite : iSprites) {
+						for (Sprite iSprite : this.iSprites) {
+							pParentScene.attachChild(iSprite);
 							iSprite.registerEntityModifier(new MoveModifier(
 									pDuration, iSprite.getX(), pX, iSprite
 											.getY(), pY));
@@ -46,11 +47,11 @@ public class IncomeAddEffect extends AEffect {
 					@Override
 					public void onModifierFinished(
 							IModifier<IEntity> pModifier, IEntity pItem) {
-						for (Sprite iSprite : iSprites) {
+						for (Sprite iSprite : this.iSprites) {
 							pParentScene.detachChild(iSprite);
 						}
 						pController.getView().getHUDManager().getGameHUD()
-								.getCoinEntity().getTextScore()
+								.getCoinEntity()
 								.setText(String.valueOf(pNewCoinCount));
 					}
 				});

@@ -8,15 +8,14 @@ import org.andengine.input.touch.TouchEvent;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.scenes.AControllerScene;
+
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
  * 
  */
-public class EditorScene extends AControllerScene
-		implements
-			IEditorScene,
-			IOnSceneTouchListener {
+public class EditorScene extends AControllerScene implements IEditorScene,
+		IOnSceneTouchListener {
 	public static final float DEFAULT_SPRITE_SIDE_LENGTH_HEIGHT_FACTOR = 0.1f;
 	private Sprite[][] gSprites;
 	private float gSpriteSideLength;
@@ -53,9 +52,10 @@ public class EditorScene extends AControllerScene
 	public void drawSprite(String pKey, int pColumn, int pRow) {
 		Sprite lSprite = new Sprite(pColumn * this.gSpriteSideLength, pRow
 				* this.gSpriteSideLength, this.gSpriteSideLength,
-				this.gSpriteSideLength, this.getController().getView()
-						.getResourceManager().getTextureRegions().get(pKey),
-				this.getController().getMainActivity()
+				this.gSpriteSideLength,
+				this.getController().getView().getResourceManager()
+						.getCellTextureRegions().get(pKey), this
+						.getController().getMainActivity()
 						.getVertexBufferObjectManager());
 		this.gSprites[pColumn][pRow] = lSprite;
 		this.attachChild(lSprite);
@@ -84,7 +84,7 @@ public class EditorScene extends AControllerScene
 		this.setBackground(new SpriteBackground(new Sprite(0, 0, pColumns
 				* this.gSpriteSideLength, pRows * this.gSpriteSideLength, this
 				.getController().getView().getResourceManager()
-				.getTextureRegions().get(pKey), this.getController()
+				.getCellTextureRegions().get(pKey), this.getController()
 				.getMainActivity().getVertexBufferObjectManager())));
 	}
 
@@ -95,8 +95,7 @@ public class EditorScene extends AControllerScene
 
 	@Override
 	public String getActualKey() {
-		// TODO XXX JUST TEST
-		return "3";
+		return "castle_v5.png";
 	}
 
 	@Override
@@ -107,5 +106,10 @@ public class EditorScene extends AControllerScene
 	@Override
 	public float getSpriteSideLength() {
 		return this.gSpriteSideLength;
+	}
+
+	@Override
+	public Scene getInstance() {
+		return this;
 	}
 }

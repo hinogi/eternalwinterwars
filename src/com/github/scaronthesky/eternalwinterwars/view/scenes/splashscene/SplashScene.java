@@ -3,6 +3,7 @@ package com.github.scaronthesky.eternalwinterwars.view.scenes.splashscene;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.scene.Scene;
 import org.andengine.entity.scene.background.SpriteBackground;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.util.modifier.IModifier;
@@ -10,12 +11,13 @@ import org.andengine.util.modifier.IModifier;
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
 import com.github.scaronthesky.eternalwinterwars.view.managers.SceneManager.SceneType;
 import com.github.scaronthesky.eternalwinterwars.view.scenes.AControllerScene;
+
 /**
  * @author Manuel Seiche
  * @since 20.10.2014
  * 
  */
-public class SplashScene extends AControllerScene {
+public class SplashScene extends AControllerScene implements ISplashScene {
 
 	public SplashScene(IController pController) {
 		super(pController);
@@ -26,6 +28,7 @@ public class SplashScene extends AControllerScene {
 		this.createBackground();
 	}
 
+	@Override
 	public void loadAndChangeScene(final SceneType pNewScene) {
 		DelayModifier lDelayModifier = new DelayModifier(5,
 				new IEntityModifierListener() {
@@ -42,11 +45,15 @@ public class SplashScene extends AControllerScene {
 								.getSceneManager().load();
 						SplashScene.this.getController().getView()
 								.getSoundManager().load();
+						SplashScene.this.getController().getView()
+								.getAnimationPropertiesManager().load();
 					}
 
 					@Override
 					public void onModifierFinished(
 							IModifier<IEntity> pModifier, IEntity pItem) {
+						SplashScene.this.getController().getModel()
+								.displayBoard();
 						SplashScene.this.getController().getView()
 								.getSceneManager()
 								.setActualSceneType(pNewScene);
@@ -64,5 +71,10 @@ public class SplashScene extends AControllerScene {
 				.getController().getMainActivity()
 				.getVertexBufferObjectManager());
 		this.setBackground(new SpriteBackground(lBackgroundSprite));
+	}
+
+	@Override
+	public Scene getInstance() {
+		return this;
 	}
 }

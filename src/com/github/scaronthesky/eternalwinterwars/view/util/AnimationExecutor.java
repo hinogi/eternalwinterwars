@@ -1,4 +1,4 @@
-package com.github.scaronthesky.eternalwinterwars.view;
+package com.github.scaronthesky.eternalwinterwars.view.util;
 
 import org.andengine.entity.sprite.AnimatedSprite;
 import org.andengine.entity.sprite.AnimatedSprite.IAnimationListener;

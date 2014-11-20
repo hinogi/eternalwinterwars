@@ -5,7 +5,7 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.color.Color;
 
-import com.github.scaronthesky.eternalwinterwars.view.ShapeBuilder;
+import com.github.scaronthesky.eternalwinterwars.view.util.builders.ShapeBuilder;
 
 
 /**

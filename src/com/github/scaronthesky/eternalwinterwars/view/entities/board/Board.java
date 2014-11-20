@@ -1,15 +1,12 @@
 package com.github.scaronthesky.eternalwinterwars.view.entities.board;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import org.andengine.entity.Entity;
 import org.andengine.entity.sprite.Sprite;
 
 import com.github.scaronthesky.eternalwinterwars.controller.IController;
-import com.github.scaronthesky.eternalwinterwars.model.cellcontrol.CellControl;
 import com.github.scaronthesky.eternalwinterwars.model.cells.Cell;
-import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEntity;
 
 /**
  * @author Manuel Seiche
@@ -17,28 +14,22 @@ import com.github.scaronthesky.eternalwinterwars.view.entities.game.AGameBaseEnt
  * 
  */
 public class Board extends Entity {
-	public static final float DEFAULT_CELL_BOUNDS_FACTOR = 0.05f;
+	public static final float DEFAULT_CELL_BOUNDS_FACTOR = 0.1f;
 	private final IController gController;
-	private List<AGameBaseEntity> gGameBaseEntities;
 	private float gCellWidth;
 	private float gCellHeight;
 
 	/**
 	 * Creates an instance of {@link Board}
 	 * 
-	 * @param pColumns
-	 *            the board's column count
-	 * @param pRows
-	 *            the board's row count
+	 * @param pController
+	 *            {@link IController} - reference
 	 * @param pCellWidth
 	 *            each cell's width
 	 * @param pCellHeight
 	 *            each cell's height
-	 * @param cellControl
-	 *            .getCells() {@link Cell} - array
 	 */
-	public Board(IController pController, int pColumns, int pRows,
-			float pCellWidth, float pCellHeight) {
+	public Board(IController pController, float pCellWidth, float pCellHeight) {
 		this.gController = pController;
 		this.gCellWidth = pCellWidth;
 		this.gCellHeight = pCellHeight;
@@ -50,7 +41,7 @@ public class Board extends Entity {
 	 */
 	private void initialize() {
 		this.initializeBackgroundSprite();
-		this.initializeCellSprites(gController.getModel().getCellControl()
+		this.initializeCellSprites(this.gController.getModel().getCellControl()
 				.getCells());
 		// TODO
 		this.gController.getView().limitCameraBoundsToBoard(
@@ -72,14 +63,14 @@ public class Board extends Entity {
 	 */
 	private void initializeBackgroundSprite() {
 		Sprite lBackgroundSprite = new Sprite(0, 0, this.gController.getView()
-				.getResourceManager().getTextureRegions().get(2),
+				.getResourceManager().getCellTextureRegions().get("bg_v3.png"),
 				this.gController.getMainActivity()
 						.getVertexBufferObjectManager());
-		lBackgroundSprite.setWidth(this.gController.getModel().getCellControl()
-				.getCells().size()
-				* this.gCellWidth);
 		lBackgroundSprite.setHeight(this.gController.getModel()
-				.getCellControl().getCells().get(0).size()
+				.getCellControl().getRowCount()
+				* this.gCellWidth);
+		lBackgroundSprite.setWidth(this.gController.getModel().getCellControl()
+				.getColumnCount()
 				* this.gCellHeight);
 		this.attachChild(lBackgroundSprite);
 	}
@@ -91,46 +82,25 @@ public class Board extends Entity {
 	 *            {@link Cell} - array
 	 */
 	private void initializeCellSprites(ArrayList<ArrayList<Cell>> pCells) {
-		for (int lColumn = 0; lColumn < pCells.size(); lColumn++) {
-			for (int lRow = 0; lRow < pCells.get(0).size(); lRow++) {
-				Sprite lCellSprite = pCells.get(lColumn).get(lRow).getSprite();
-				lCellSprite.setWidth(this.gCellWidth);
-				lCellSprite.setHeight(this.gCellHeight);
-				this.attachChild(lCellSprite);
+		float lCellSideLength = this.gController.getView().getCellSideLength();
+		for (int lRow = 0; lRow < pCells.size(); lRow++) {
+			for (int lColumn = 0; lColumn < pCells.get(0).size(); lColumn++) {
+				Cell lCell = pCells.get(lRow).get(lColumn);
+				float lX = lCellSideLength * lColumn;
+				float lY = lCellSideLength * lRow;
+				if (lCell.getSpriteKey() != null) {
+					Sprite lCellSprite = new Sprite(lX, lY, this.gController
+							.getView().getResourceManager()
+							.getCellTextureRegions().get(lCell.getSpriteKey()),
+							this.gController.getMainActivity()
+									.getVertexBufferObjectManager());
+					lCellSprite.setWidth(this.gCellWidth);
+					lCellSprite.setHeight(this.gCellHeight);
+					this.attachChild(lCellSprite);
+				}
 			}
 		}
 	}
-
-	// /**
-	// * If cell has another CellType than CellType.PLAIN, a Sprite is attached
-	// at
-	// * the Cells location
-	// *
-	// * @param pColumn
-	// * the cell's column
-	// * @param pRow
-	// * the cell's row
-	// * @param pCell
-	// */
-	// private void createCellSpriteIfNeccessary(int pColumn, int pRow, Cell
-	// pCell) {
-	// int lKeyLocation = pRow
-	// * this.gController.getModel().getCellControl().getBoardString()
-	// .getColumns() + pColumn;
-	// String lImageKey = this.gController.getModel().getCellControl()
-	// .getBoardString().getBoardString()
-	// .substring(lKeyLocation, lKeyLocation + 1);
-	// ITextureRegion lTextureRegion = this.gController.getView()
-	// .getResourceManager().getTextureRegions().get(lImageKey);
-	// if (!lImageKey.startsWith("bg") && lTextureRegion != null) {
-	// Sprite lCellSprite = new Sprite(pColumn * this.gCellWidth, pRow
-	// * this.gCellHeight, lTextureRegion, this.gController
-	// .getMainActivity().getVertexBufferObjectManager());
-	// lCellSprite.setWidth(this.gCellWidth);
-	// lCellSprite.setHeight(this.gCellHeight);
-	// this.attachChild(lCellSprite);
-	// }
-	// }
 
 	/**
 	 * Calculates a cells start-coordinates
@@ -187,13 +157,12 @@ public class Board extends Entity {
 	}
 
 	public float getWidth() {
-		return this.gController.getModel().getCellControl().getCells().size()
+		return this.gController.getModel().getCellControl().getColumnCount()
 				* this.gCellWidth;
 	}
 
 	public float getHeight() {
-		return this.gController.getModel().getCellControl().getCells().get(0)
-				.size()
+		return this.gController.getModel().getCellControl().getRowCount()
 				* this.gCellHeight;
 	}
 }

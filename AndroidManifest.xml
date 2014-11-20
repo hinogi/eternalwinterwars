@@ -4,8 +4,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="19"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="18"
+        android:targetSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.github.scaronthesky.eternalwinterwars.view.MainActivity"
+            android:name="com.github.scaronthesky.eternalwinterwars.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -16,8 +16,8 @@ import com.github.scaronthesky.eternalwinterwars.model.units.sightbehaviours.Uni
 
 public class Cavalry extends Unit {
 
-	public Cavalry(UUID uuid, Sprite sprite, Player owner) {
-		super(uuid, sprite, owner);
+	public Cavalry(UUID uuid, String spriteKey, Player owner) {
+		super(uuid, spriteKey, owner);
 		setHealthBehaviour(new PowerfulHealth());
 		setMovementBehaviour(new UnitVeryFastSpeed());
 		setPiercingWeaponBehaviour(new NoPiercingWeapon());

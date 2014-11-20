@@ -46,17 +46,19 @@ public class BuildingEntity extends AGameBaseEntity {
 			public boolean onAreaTouched(TouchEvent pSceneTouchEvent,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
 				if (pSceneTouchEvent.isActionDown()) {
-					BuildingEntity.this.getHealthBar().setActualHealth(
-							BuildingEntity.this.getHealthBar()
-									.getActualHealth() - 5);
-					BuildingEntity.this.changeHealthBarVisibility();
-					BuildingEntity.this.sufferFromAttack();
+					// BuildingEntity.this
+					// .getController()
+					// .getView()
+					// .getSceneManager()
+					// .getGameScene()
+					// .attack(Controller.testMarksman,
+					// BuildingEntity.this, 5, false);
 				}
 				return super.onAreaTouched(pSceneTouchEvent, pTouchAreaLocalX,
 						pTouchAreaLocalY);
 			}
 		};
-		this.getParentScene().registerTouchArea(this.gSingleTextureSprite);
+		this.registerTouchArea();
 		this.attachChild(this.gSingleTextureSprite);
 	}
 
@@ -86,5 +88,9 @@ public class BuildingEntity extends AGameBaseEntity {
 	@Override
 	public float getHeight() {
 		return this.gSingleTextureSprite.getHeight();
+	}
+
+	public void registerTouchArea() {
+		this.getParentScene().registerTouchArea(this.gSingleTextureSprite);
 	}
 }
