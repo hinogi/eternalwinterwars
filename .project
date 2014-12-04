@@ -32,6 +32,7 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
+		<nature>org.eclipse.sirius.nature.modelingproject</nature>
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
 		<nature>com.dell.toadext.ToadextNature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>

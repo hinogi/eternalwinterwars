@@ -36,16 +36,60 @@ public class AStarPathfinder {
 	
 	public AStarPath findPath(AStarMover mover, int xStartingLocation, int yStartingLocation, int xDestinationLocation, int yDestinationLocation){
 		// break if destination is totally blocked
-		if (directPath.blocked(mover, xDestinationLocation, yDestinationLocation)){
+		if (map.blocked(mover, xDestinationLocation, yDestinationLocation)){
 			return null;
 		}
 		
 		// set cost 0 to starting cell
-		ALLNODES.get(xStartingLocation, yStartingLocation).cost = 0;
+		AStarNode startingNode = ALLNODES.get(xStartingLocation, yStartingLocation);
+		startingNode.cost = 0;
+		startingNode.depth = 0;
+		closedList.clear();
+		openList.clear();
+		openList.add(startingNode);
+		
+		AStarNode destinationNode = ALLNODES.get(xDestinationLocation, yDestinationLocation);
+		destinationNode.parent = null;
+		
+		int maxDistance = 0;
+		
+		while ( ( maxDistance < maxSearchDistance) && (openList.size() != 0)){
+			AStarNode current = getFirstInOpenList();
+			
+			if ( current == destinationNode) {
+				break;
+			}
+			
+			removeFromOpenList( current );
+			addToClosedList( current );
+			
+			for (int i = -1; i < 2; i++) {
+				for (int j = -1; j < 2; j++) {
+					if ( ( i == 0 ) && (j == 0) ) {
+						continue;
+					}
+					
+					if (!allowCuttingCorners){
+						if ( (i != 0 ) && ( j != 0) ) {
+							continue;
+						}
+					}
+					
+					int xNextLocation = i + current.x;
+					int yNextLocation = j + current.y;
+					
+					if ( isValidLocation ( mover, xStartingLocation, yStartingLocation, xNextLocation, yNextLocation){
+						float nextStepCost = current.cost + getMovementCost( mover, current.x, current.y, xNextLocation, yNextLocation  );
+					})
+				}
+			}
+		}
+		
 		
 	}
 	
 	private class SortedList {
+
 		private ArrayList<Cell> list = new ArrayList<Cell>();
 		
 		public Cell first() {
@@ -68,5 +112,33 @@ public class AStarPathfinder {
 		public boolean contains( Cell c){
 			return list.contains(c);
 		}
+	}
+	
+	protected AStarNode getFirstInOpenList(){
+		return (AStarNode) openList.first();
+	}
+	
+	protected void addToOpenList( AStarNode node ){
+		openList.add( node );
+	}
+	
+	protected boolean inOpenList( AStarNode node ){
+		return openList.contains( node );
+	}
+	
+	protected void removeFromOpenList( AStarNode node ){
+		openList.remove( node );
+	}
+	
+	protected void addToClosedList ( AStarNode node){
+		closedList.add( node )
+	}
+	
+	protected boolean inClosedList ( AStarNode node){
+		return closedList.contains( node );
+	}
+	
+	protected void removeFromClosedList( AStarNode node ){
+		closedList.remove( node );
 	}
 }
